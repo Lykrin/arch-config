@@ -1,35 +1,37 @@
 #!/bin/bash
 
+# Define ANSI color codes
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+NC='\033[0m' # No Color
+
 #   Check for Base Devel
 if pacman -Q | grep -q base-devel; then
-    echo -e "$COK - Base Devel was located, moving on."
+    echo -e "${GREEN}Base Devel was located, moving on.${NC}"
 else
-    echo -e "$CER - Base Devel is required for this script, now exiting"
+    echo -e "${RED}Base Devel is required for this script, now exiting${NC}"
     exit
 fi
 
-#   Check for yay
+# Check for yay
 ISYAY=/sbin/yay
 INSTLOG="install.log"
 if [ -f "$ISYAY" ]; then 
-    echo -e "$COK - yay was located, moving on."
+    echo -e "${GREEN}Yay was located, moving on.${NC}"
     yay -Suy
 else 
-    echo -e "$CWR - Yay was NOT located"
+    echo -e "${RED}Yay was NOT located${NC}"
     read -n1 -rep $'[\e[1;33mACTION\e[0m] - Would you like to install yay (y,n) ' INSTYAY
     if [[ $INSTYAY == "Y" || $INSTYAY == "y" ]]; then
         git clone https://aur.archlinux.org/yay.git &>> $INSTLOG
         cd yay
         makepkg -si --noconfirm &>> ../$INSTLOG
         cd ..
-        
     else
-        echo -e "$CER - Yay is required for this script, now exiting"
+        echo -e "${RED}Yay is required for this script, now exiting${NC}"
         exit
     fi
 fi
-
-
 
 #   Install all needed packages
 read -n1 -rep 'Would you like to install the packages? (y,n)' INST
