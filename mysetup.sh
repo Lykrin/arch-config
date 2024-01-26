@@ -10,6 +10,7 @@ fi
 
 #   Check for yay
 ISYAY=/sbin/yay
+INSTLOG="install.log"
 if [ -f "$ISYAY" ]; then 
     echo -e "$COK - yay was located, moving on."
     yay -Suy
