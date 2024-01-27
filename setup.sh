@@ -37,12 +37,12 @@ fi
 read -n1 -rep 'Would you like to install the packages? (y,n)' INST
 if [[ $INST == "Y" || $INST == "y" ]]; then
     yay -R --noconfirm swaylock waybar
-    sudo yay -S --noconfirm hyprland-git polkit-gnome ffmpeg fastfetch neovim viewnior \
+    sudo yay -S --noconfirm zsh hyprland-git polkit-gnome ffmpeg fastfetch neovim viewnior \
     rofi-lbonn-wayland pavucontrol thunar starship cliphist wl-clipboard \
     wf-recorder swww waypaper grimblast-git ffmpegthumbnailer tumbler gvfs \
     playerctl noise-suppression-for-voice file-roller thunar-archive-plugin \
     thunar-media-tags-plugin kitty thunar-volman gvfs-mtp brave-bin vesktop \
-    waybar-git wlogout swaylock-effects pamixer papirus-icon-theme \
+    waybar-git wlogout  swaylock-effects pamixer papirus-icon-theme \
     nwg-look-bin dunst ttf-firacode-nerd noto-fonts qt5-wayland qt6-wayland\
     noto-fonts-emoji ttf-nerd-fonts-symbols-common otf-firamono-nerd \
     brightnessctl hyprpicker-git pipewire lib32-pipewire wireplumber \
@@ -50,34 +50,43 @@ if [[ $INST == "Y" || $INST == "y" ]]; then
     lib32-pipewire-jack xdg-user-dirs xdg-desktop-portal-hyprland catppuccin-gtk-theme-mocha --needed
 fi
 
-#   Making directory
-#xdg-user-dirs-update
-mkdir -p ~/Pictures/Screenshots/
-
-#   Copy Config Files
-read -n1 -rep 'Would you like to copy config files? (y,n)' CFG
+#  Copy .config files
+read -n1 -rep 'Would you like to copy .config files? (y,n)' CFG
 if [[ $CFG == "Y" || $CFG == "y" ]]; then
-    echo -e "Copying config files...\n"
-    cp -R config/dunst ~/.config/
-    cp -R config/hypr ~/.config/
-    cp -R config/kitty ~/.config/
-    #cp -R config/pipewire ~/.config/
-    cp -R config/rofi ~/.config/
-    cp -R config/swaylock ~/.config/
-    cp -R config/waybar ~/.config/
-    cp -R config/wlogout ~/.config/
-    cp -R config/xfce4 ~/.config/
-
-    # mkdir -p ~/Pictures/wallpaper
-    cp -R ./wallpapers ~/Pictures/
-    
-    # Set some files as exacutable 
-    chmod +x ~/.config/hypr/xdg-portal-hyprland
+    echo -e "Copying .config files...\n"
+    cp -R .config/* ~/.config/
+    # set as executable
     chmod +x ~/.config/waybar/scripts/*
+    chmod +x ~/.config/hypr/xdg-portal-hyprland
+fi
+
+#   set zhrc as default shell
+read -n1 -rep 'Would you like to set zsh as default shell? (y,n)' ZSH
+if [[ $ZSH == "Y" || $ZSH == "y" ]]; then
+    echo -e "Setting zsh as default shell...\n"
+    chsh -s /bin/zsh
+fi
+
+#   Copy .zshrc
+read -n1 -rep 'Would you like to copy .zshrc? (y,n)' ZSH
+if [[ $ZSH == "Y" || $ZSH == "y" ]]; then
+    echo -e "Copying .zshrc...\n"
+    cp .zshrc ~/
+fi
+
+# install oh-my-zsh
+read -n1 -rep 'Would you like to install oh-my-zsh? (y,n)' ZSH
+if [[ $ZSH == "Y" || $ZSH == "y" ]]; then
+    echo -e "Installing oh-my-zsh...\n"
+    sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 fi
 
 #   Install NVChad
-git clone https://github.com/NvChad/NvChad ~/.config/nvim --depth 1 && nvim
+read -n1 -rep 'Would you like to install NVChad? (y,n)' NVCHAD
+if [[ $NVCHAD == "Y" || $NVCHAD == "y" ]]; then
+    echo -e "Installing NVChad...\n"
+    git clone https://github.com/NvChad/NvChad ~/.config/nvim --depth 1
+fi
 
 #   Script is done
 echo -e "Script had completed.\n"
