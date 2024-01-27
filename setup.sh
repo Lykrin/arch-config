@@ -1,5 +1,4 @@
 #!/bin/bash
-
 # Define ANSI color codes
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -27,6 +26,7 @@ else
         cd yay
         makepkg -si --noconfirm &>> ../$INSTLOG
         cd ..
+        rm -rf yay
     else
         echo -e "${RED}Yay is required for this script, now exiting${NC}"
         exit
@@ -37,12 +37,11 @@ fi
 read -n1 -rep 'Would you like to install the packages? (y,n)' INST
 if [[ $INST == "Y" || $INST == "y" ]]; then
     yay -R --noconfirm swaylock waybar
-    yay -R --noconfirm swaylock waybar
-    yay -S hyprland-git polkit-gnome ffmpeg fastfetch neovim viewnior \
+    sudo yay -S --noconfirm hyprland-git polkit-gnome ffmpeg fastfetch neovim viewnior \
     rofi-lbonn-wayland pavucontrol thunar starship cliphist wl-clipboard \
     wf-recorder swww waypaper grimblast-git ffmpegthumbnailer tumbler gvfs \
     playerctl noise-suppression-for-voice file-roller thunar-archive-plugin \
-    thunar-media-tags-plugin kitty thunar-volman gvfs-mtp \
+    thunar-media-tags-plugin kitty thunar-volman gvfs-mtp brave-bin vesktop \
     waybar-git wlogout swaylock-effects pamixer papirus-icon-theme \
     nwg-look-bin dunst ttf-firacode-nerd noto-fonts qt5-wayland qt6-wayland\
     noto-fonts-emoji ttf-nerd-fonts-symbols-common otf-firamono-nerd \
@@ -50,8 +49,8 @@ if [[ $INST == "Y" || $INST == "y" ]]; then
     pipewire-audio pipewire-pulse pipewire-alsa pipewire-jack \
     lib32-pipewire-jack xdg-user-dirs xdg-desktop-portal-hyprland catppuccin-gtk-theme-mocha --needed
 fi
-#   Making directory
 
+#   Making directory
 #xdg-user-dirs-update
 mkdir -p ~/Pictures/Screenshots/
 
@@ -80,7 +79,6 @@ fi
 #   Install NVChad
 git clone https://github.com/NvChad/NvChad ~/.config/nvim --depth 1 && nvim
 
-
 #   Script is done
 echo -e "Script had completed.\n"
 echo -e "You can start Hyprland by typing Hyprland (note the capital H).\n"
@@ -90,4 +88,3 @@ if [[ $HYP == "Y" || $HYP == "y" ]]; then
 else
     exit
 fi
-
