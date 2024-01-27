@@ -37,7 +37,7 @@ fi
 read -n1 -rep 'Would you like to install the packages? (y,n)' INST
 if [[ $INST == "Y" || $INST == "y" ]]; then
     yay -R --noconfirm swaylock waybar
-    sudo yay -S --noconfirm zsh hyprland-git polkit-gnome ffmpeg fastfetch neovim viewnior \
+    yay -S --noconfirm zsh hyprland-git polkit-gnome ffmpeg fastfetch neovim viewnior \
     rofi-lbonn-wayland pavucontrol thunar starship cliphist wl-clipboard \
     wf-recorder swww waypaper grimblast-git ffmpegthumbnailer tumbler gvfs \
     playerctl noise-suppression-for-voice file-roller thunar-archive-plugin \
@@ -60,25 +60,11 @@ if [[ $CFG == "Y" || $CFG == "y" ]]; then
     chmod +x ~/.config/hypr/xdg-portal-hyprland
 fi
 
-#   set zhrc as default shell
-read -n1 -rep 'Would you like to set zsh as default shell? (y,n)' ZSH
-if [[ $ZSH == "Y" || $ZSH == "y" ]]; then
-    echo -e "Setting zsh as default shell...\n"
-    chsh -s /bin/zsh
-fi
-
 #   Copy .zshrc
 read -n1 -rep 'Would you like to copy .zshrc? (y,n)' ZSH
 if [[ $ZSH == "Y" || $ZSH == "y" ]]; then
     echo -e "Copying .zshrc...\n"
     cp .zshrc ~/
-fi
-
-# install oh-my-zsh
-read -n1 -rep 'Would you like to install oh-my-zsh? (y,n)' ZSH
-if [[ $ZSH == "Y" || $ZSH == "y" ]]; then
-    echo -e "Installing oh-my-zsh...\n"
-    sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 fi
 
 #   Install NVChad
@@ -88,12 +74,19 @@ if [[ $NVCHAD == "Y" || $NVCHAD == "y" ]]; then
     git clone https://github.com/NvChad/NvChad ~/.config/nvim --depth 1
 fi
 
+# install oh-my-zsh
+read -n1 -rep 'Would you like to install oh-my-zsh? (y,n)' ZSH
+if [[ $ZSH == "Y" || $ZSH == "y" ]]; then
+    echo -e "Installing oh-my-zsh...\n"
+    sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+fi
+
 #   Script is done
 echo -e "Script had completed.\n"
 echo -e "You can start Hyprland by typing Hyprland (note the capital H).\n"
-read -n1 -rep 'Would you like to start Hyprland now? (y,n)' HYP
+read -n1 -rep 'Would you like to reboot? (y,n)' HYP
 if [[ $HYP == "Y" || $HYP == "y" ]]; then
-    exec Hyprland
+    reboot
 else
     exit
 fi
