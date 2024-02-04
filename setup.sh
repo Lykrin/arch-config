@@ -81,28 +81,8 @@ if [[ $ZSH == "Y" || $ZSH == "y" ]]; then
     sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 fi
 
-cat <<EOF > /etc/systemd/system/ath11k-suspend.service [Unit] Description=Suspend: rmmod ath11k_pci Before=sleep.target
-
-[Service] Type=simple ExecStart=/usr/bin/rmmod ath11k_pci
-
-[Install] WantedBy=sleep.target EOF
-
-cat <<EOF > /etc/systemd/system/ath11k-resume.service [Unit] Description=Resume: modprobe ath11k_pci After=suspend.target
-
-[Service] Type=simple ExecStart=/usr/bin/modprobe ath11k_pci
-
-[Install] WantedBy=suspend.target EOF
-
-cat <<EOF > /etc/systemd/network/10-ath11k.network [Match] Driver=ath11k_pci
-
-[Network] BindCarrier=ath11k-suspend.service ath11k-resume.service EOF
-
-systemctl enable --now ath11k-suspend.service ath11k-resume.service
-
-systemctl enable --now systemd-networkd.service
-
 #   Script is done
-echo -e "Script had completed. Remember to set wifi service up. \n"
+echo -e "Script had completed. Remember to set wifi service up. https://wiki.archlinux.org/title/Lenovo_ThinkPad_T14s_(AMD)_Gen_3 \n"
 echo -e "You can start Hyprland by typing Hyprland (note the capital H).\n"
 read -n1 -rep 'Would you like to reboot? (y,n)' HYP
 if [[ $HYP == "Y" || $HYP == "y" ]]; then
