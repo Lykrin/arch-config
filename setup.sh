@@ -46,7 +46,7 @@ if [[ $INST == "Y" || $INST == "y" ]]; then
     nwg-look-bin dunst ttf-firacode-nerd noto-fonts qt5-wayland qt6-wayland\
     noto-fonts-emoji ttf-nerd-fonts-symbols-common otf-firamono-nerd \
     brightnessctl hyprpicker-git pipewire lib32-pipewire wireplumber \
-    pipewire-audio pipewire-pulse pipewire-alsa pipewire-jack \
+    pipewire-audio pipewire-pulse pipewire-alsa pipewire-jack motivewave \
     lib32-pipewire-jack xdg-user-dirs xdg-desktop-portal-hyprland catppuccin-gtk-theme-mocha --needed
 fi
 
