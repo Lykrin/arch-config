@@ -60,13 +60,6 @@ if [[ $CFG == "Y" || $CFG == "y" ]]; then
     chmod +x ~/.config/hypr/xdg-portal-hyprland
 fi
 
-#   Copy .zshrc
-read -n1 -rep 'Would you like to copy .zshrc? (y,n)' ZSH
-if [[ $ZSH == "Y" || $ZSH == "y" ]]; then
-    echo -e "Copying .zshrc...\n"
-    cp .zshrc ~/
-fi
-
 #   Install NVChad
 read -n1 -rep 'Would you like to install NVChad? (y,n)' NVCHAD
 if [[ $NVCHAD == "Y" || $NVCHAD == "y" ]]; then
@@ -79,6 +72,13 @@ read -n1 -rep 'Would you like to install oh-my-zsh? (y,n)' ZSH
 if [[ $ZSH == "Y" || $ZSH == "y" ]]; then
     echo -e "Installing oh-my-zsh...\n"
     sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+fi
+
+#   Copy .zshrc
+read -n1 -rep 'Would you like to copy .zshrc? (y,n)' ZSH
+if [[ $ZSH == "Y" || $ZSH == "y" ]]; then
+    echo -e "Copying .zshrc...\n"
+    cp .zshrc ~/
 fi
 
 #   Script is done
