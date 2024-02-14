@@ -4,4 +4,4 @@ gsettings set org.gnome.desktop.interface gtk-theme "Catppuccin-Mocha-Standard-L
 gsettings set org.gnome.desktop.interface icon-theme "WhiteSur-dark"
 #change the background image and be cool about it ;)
 killall swaybg
-swaybg -m fill -i ~/Pictures/wallpapers/axo1.png
+hyprpaper -m fill -i ~/Pictures/wallpapers/1
