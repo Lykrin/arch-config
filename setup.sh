@@ -36,9 +36,8 @@ fi
 #   Install all needed packages
 read -n1 -rep 'Would you like to install the packages? (y,n)' INST
 if [[ $INST == "Y" || $INST == "y" ]]; then
-    yay -R --noconfirm swaylock waybar
     yay -S --noconfirm zsh hyprland-git polkit-gnome ffmpeg fastfetch neovim viewnior \
-    fuzzel pavucontrol thunar zsh-antidote cliphist wl-clipboard \
+    fuzzel pavucontrol zsh-antidote cliphist wl-clipboard nomacs clapper \
     wf-recorder hyprpaper grimblast-git ffmpegthumbnailer  gvfs \
     foot foot-terminfo nemo nemo-fileroller gvfs-mtp brave-bin vesktop \
     waybar-git hypridle hyprlock pamixer papirus-icon-theme \
