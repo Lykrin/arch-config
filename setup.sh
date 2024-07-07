@@ -38,11 +38,10 @@ read -n1 -rep 'Would you like to install the packages? (y,n)' INST
 if [[ $INST == "Y" || $INST == "y" ]]; then
     yay -R --noconfirm swaylock waybar
     yay -S --noconfirm zsh hyprland-git polkit-gnome ffmpeg fastfetch neovim viewnior \
-    rofi-lbonn-wayland pavucontrol thunar starship cliphist wl-clipboard \
-    wf-recorder swww waypaper grimblast-git ffmpegthumbnailer tumbler gvfs \
-    playerctl noise-suppression-for-voice file-roller thunar-archive-plugin \
-    thunar-media-tags-plugin kitty thunar-volman gvfs-mtp brave-bin vesktop \
-    waybar-git wlogout  swaylock-effects pamixer papirus-icon-theme \
+    fuzzel pavucontrol thunar zsh-antidote cliphist wl-clipboard \
+    wf-recorder hyprpaper grimblast-git ffmpegthumbnailer  gvfs \
+    foot foot-terminfo nemo nemo-fileroller gvfs-mtp brave-bin vesktop \
+    waybar-git hypridle hyprlock pamixer papirus-icon-theme \
     nwg-look-bin dunst ttf-firacode-nerd noto-fonts qt5-wayland qt6-wayland\
     noto-fonts-emoji ttf-nerd-fonts-symbols-common otf-firamono-nerd \
     brightnessctl hyprpicker-git pipewire lib32-pipewire wireplumber \
@@ -67,12 +66,8 @@ if [[ $NVCHAD == "Y" || $NVCHAD == "y" ]]; then
     git clone https://github.com/NvChad/NvChad ~/.config/nvim --depth 1
 fi
 
-# install oh-my-zsh
-read -n1 -rep 'Would you like to install oh-my-zsh? (y,n)' ZSH
-if [[ $ZSH == "Y" || $ZSH == "y" ]]; then
-    echo -e "Installing oh-my-zsh...\n"
-    sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-fi
+# set zsh as default bash
+chsh -s /bin/zsh
 
 #   Copy .zshrc
 read -n1 -rep 'Would you like to copy .zshrc? (y,n)' ZSH
