@@ -87,7 +87,7 @@ if prompt_user "Would you like to copy .zshrc and .zsh_plugins.txt?"; then
 fi
 
 # Script completion
-print_message "$GREEN" "Script has completed. Remember to set up wifi service: https://wiki.archlinux.org/title/Lenovo_ThinkPad_T14s_(AMD)_Gen_3"
+print_message "$GREEN" "Script has completed. Remember to set iwd and quiet boot"
 print_message "$GREEN" "You can start Hyprland by typing Hyprland (note the capital H)."
 
 # Prompt for reboot
