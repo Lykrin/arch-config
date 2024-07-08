@@ -38,14 +38,14 @@ read -n1 -rep 'Would you like to install the packages? (y,n)' INST
 if [[ $INST == "Y" || $INST == "y" ]]; then
     yay -S --noconfirm zsh hyprland-git polkit-gnome ffmpeg fastfetch neovim viewnior \
     fuzzel pavucontrol zsh-antidote cliphist wl-clipboard nomacs clapper \
-    wf-recorder hyprpaper grimblast-git ffmpegthumbnailer  gvfs \
+    wf-recorder hyprpaper grimblast-git ffmpegthumbnailer btop gvfs \
     foot foot-terminfo nemo nemo-fileroller gvfs-mtp brave-bin vesktop \
-    waybar-git hypridle hyprlock pamixer papirus-icon-theme \
+    waybar-git hypridle starship hyprlock pamixer sweet-folders-icons-git LADSPA \
     nwg-look-bin dunst ttf-firacode-nerd noto-fonts qt5-wayland qt6-wayland\
     noto-fonts-emoji ttf-nerd-fonts-symbols-common otf-firamono-nerd \
-    brightnessctl hyprpicker-git pipewire lib32-pipewire wireplumber \
-    pipewire-audio pipewire-pulse pipewire-alsa pipewire-jack motivewave \
-    lib32-pipewire-jack xdg-user-dirs xdg-desktop-portal-hyprland catppuccin-gtk-theme-mocha --needed
+    brightnessctl pipewire noise-suppression-for-voice lib32-pipewire wireplumber \
+    pipewire-audio pipewire-pulse pipewire-alsa pipewire-jack ladspa motivewave \
+    lib32-pipewire-jack xdg-user-dirs xdg-desktop-portal-hyprland sweet-gtk-theme --needed
 fi
 
 #  Copy .config files
