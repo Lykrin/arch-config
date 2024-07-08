@@ -9,9 +9,6 @@ if [[ ! ${zsh_plugins}.zsh -nt ${zsh_plugins}.txt ]]; then
 fi
 source ${zsh_plugins}.zsh
 
-# initialize plugins statically with ${ZDOTDIR:-~}/.zsh_plugins.txt
-antidote load
-
 # Set the file name and size for the command history
 HISTFILE=~/.histfile
 HISTSIZE=5000
