@@ -69,11 +69,14 @@ fi
 # set zsh as default bash
 chsh -s /bin/zsh
 
-#   Copy .zshrc
-read -n1 -rep $'Would you like to copy .zshrc? (Y/n) ' ZSH
+#   Copy .zshrc and .zsh_plugins.txt
+read -n1 -rep $'Would you like to copy .zshrc and .zsh_plugins.txt? (Y/n) ' ZSH
 if [[ $ZSH != "N" && $ZSH != "n" ]]; then
-    echo -e "Copying .zshrc...\n"
-    cp .zshrc ~/
+    echo -e "Copying .zshrc and .zsh_plugins.txt...\n"
+    cp .zshrc ~/.zshrc
+    cp .zsh_plugins.txt ~/.zsh_plugins.txt
+    # Ensure the files are readable
+    chmod 644 ~/.zshrc ~/.zsh_plugins.txt
 fi
 
 #   Script is done
