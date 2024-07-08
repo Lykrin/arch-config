@@ -16,6 +16,8 @@
 pactl info
 ```
 
+copy iwd config, silent boot configs, mkinitcpio streamlined hooks, font config etc...
+
 - Check xdg-desktop-portal-hyprland(obs)
 - Blootooth?,Task manager?,powertop?
 - wine,lutris
