@@ -61,7 +61,8 @@ if prompt_user "Would you like to install the packages?"; then
         noto-fonts-emoji ttf-nerd-fonts-symbols-common otf-firamono-nerd networkmanager-dmenu-git \
         brightnessctl pipewire noise-suppression-for-voice lib32-pipewire wireplumber \
         pipewire-audio pipewire-pulse pipewire-alsa pipewire-jack ladspa motivewave \
-        lib32-pipewire-jack xdg-user-dirs xdg-desktop-portal-hyprland sweet-gtk-theme
+        lib32-pipewire-jack xdg-user-dirs xdg-desktop-portal-hyprland sweet-gtk-theme \
+        network-manager-applet 
 fi
 
 # Copy .config files
