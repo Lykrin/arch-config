@@ -54,11 +54,11 @@ if prompt_user "Would you like to install the packages?"; then
     yay -S --noconfirm --needed \
         zsh hyprland-git polkit-gnome ffmpeg fastfetch neovim viewnior \
         fuzzel pavucontrol zsh-antidote cliphist wl-clipboard clapper wttrbar \
-        wf-recorder hyprpaper grimblast-git ffmpegthumbnailer btop gvfs \
-        foot foot-terminfo nemo nemo-fileroller gvfs-mtp brave-bin mkinitcpio-firmware vesktop \
+        wf-recorder hyprpaper grimblast-git ffmpegthumbnailer btop gvfs vesktop \
+        foot foot-terminfo nemo nemo-fileroller gvfs-mtp brave-bin mkinitcpio-firmware \
         waybar-git hypridle starship hyprlock pamixer sweet-folders-icons-git LADSPA \
         nwg-look-bin dunst ttf-firacode-nerd noto-fonts qt5-wayland qt6-wayland \
-        noto-fonts-emoji ttf-nerd-fonts-symbols-common otf-firamono-nerd \
+        noto-fonts-emoji ttf-nerd-fonts-symbols-common otf-firamono-nerd networkmanager-dmenu-git \
         brightnessctl pipewire noise-suppression-for-voice lib32-pipewire wireplumber \
         pipewire-audio pipewire-pulse pipewire-alsa pipewire-jack ladspa motivewave \
         lib32-pipewire-jack xdg-user-dirs xdg-desktop-portal-hyprland sweet-gtk-theme
