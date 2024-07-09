@@ -12,7 +12,7 @@
     "memory",
     "disk",
     "temperature",
-    "custom/wttr",
+    "custom/weather",
     "custom/update",
     "hyprland/window"
   ],
@@ -85,7 +85,7 @@
     "format-linked": "{ifname} (No IP) ",
     "format-disconnected": "Disconnected ⚠",
     "format-alt": "{ifname}:{essid} {ipaddr}/{cidr}",
-    "on-click-right": "~/.config/waybar/scripts/rofi-wifi-menu"
+    "on-click-right": "~/.config/waybar/scripts/fuzzel_iwd.sh"
   },
 //  "bluetooth": {
 //    "exec": "~/.config/waybar/scripts/rofi-bluetooth-menu --status",
@@ -101,12 +101,12 @@
     "format": " {}%",
     "tooltip": true,
     "tooltip-format": "Memory - {used:0.1f}GB used",
-    "on-click": "kitty --start-as=fullscreen --title bpytop sh -c 'htop'"
+    "on-click": "foot --fullscreen --title btop sh -c 'btop'"
   },
   "cpu": {
     "interval": 1,
     "format": " {usage}%",
-    "on-click": "kitty --start-as=fullscreen --title bpytop sh -c 'htop'"
+    "on-click": "foot --fullscreen --title btop sh -c 'btop'"
   },
   "disk": {
     "interval": 1,
@@ -116,7 +116,7 @@
     "format-alt": "󰋊 {percentage_used}%",
     "tooltip": true,
     "tooltip-format": "Disk - {used} used out of {total} on {path} ({percentage_used}%)",
-    "on-click": "kitty --start-as=fullscreen --title bpytop sh -c 'htop'"
+    "on-click": "foot --fullscreen --title btop sh -c 'btop'"
   },
   "temperature": {
     "interval": 1,
@@ -124,7 +124,7 @@
     "format": " {temperatureC}°C",
     "critical-threshold": 80,
     "format-critical": " {temperatureC}°C",
-    "on-click": "kitty --start-as=fullscreen --title bpytop sh -c 'htop'"
+    "on-click": "foot --fullscreen --title btop sh -c 'btop'"
   },
  "custom/weather": {
     "format": "{}°",
