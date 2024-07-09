@@ -53,7 +53,7 @@ fi
 if prompt_user "Would you like to install the packages?"; then
     yay -S --noconfirm --needed \
         zsh hyprland-git polkit-gnome ffmpeg fastfetch neovim viewnior \
-        fuzzel pavucontrol zsh-antidote cliphist wl-clipboard clapper \
+        fuzzel pavucontrol zsh-antidote cliphist wl-clipboard clapper wttrbar \
         wf-recorder hyprpaper grimblast-git ffmpegthumbnailer btop gvfs \
         foot foot-terminfo nemo nemo-fileroller gvfs-mtp brave-bin mkinitcpio-firmware vesktop \
         waybar-git hypridle starship hyprlock pamixer sweet-folders-icons-git LADSPA \
