@@ -8,7 +8,7 @@ NC='\033[0m' # No Color
 
 INSTLOG="install.log"
 
-# Function to print colored messages
+ Function to print colored messages
 print_message() {
     local color=$1
     local message=$2
@@ -18,7 +18,9 @@ print_message() {
 # Function to prompt user
 prompt_user() {
     local prompt=$1
-    read -n1 -rep $"${YELLOW}${prompt}${NC} (Y/n) " response
+    echo -en "${YELLOW}${prompt}${NC} (Y/n) "
+    read -n1 -r response
+    echo  # move to a new line
     [[ $response != "N" && $response != "n" ]]
 }
 
