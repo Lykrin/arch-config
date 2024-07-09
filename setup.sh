@@ -53,7 +53,7 @@ if prompt_user "Would you like to install the packages?"; then
         zsh hyprland-git polkit-gnome ffmpeg fastfetch neovim viewnior \
         fuzzel pavucontrol zsh-antidote cliphist wl-clipboard nomacs clapper \
         wf-recorder hyprpaper grimblast-git ffmpegthumbnailer btop gvfs \
-        foot foot-terminfo nemo nemo-fileroller gvfs-mtp brave-bin vesktop \
+        foot foot-terminfo nemo nemo-fileroller gvfs-mtp brave-bin mkinitcpio-firmware vesktop \
         waybar-git hypridle starship hyprlock pamixer sweet-folders-icons-git LADSPA \
         nwg-look-bin dunst ttf-firacode-nerd noto-fonts qt5-wayland qt6-wayland \
         noto-fonts-emoji ttf-nerd-fonts-symbols-common otf-firamono-nerd \
