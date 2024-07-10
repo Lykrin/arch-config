@@ -1,3 +1,6 @@
+# Zsh plugins configuration
+# Location: ~/.config/zsh/.zsh_plugins.txt
+
 # Prompt
 romkatv/powerlevel10k
 
@@ -8,6 +11,7 @@ olets/zsh-abbr
 # Autocomplete and suggestions
 zsh-users/zsh-completions
 zsh-users/zsh-autosuggestions
+marlonrichert/zsh-autocomplete
 
 # History
 zsh-users/zsh-history-substring-search
