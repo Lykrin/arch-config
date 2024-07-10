@@ -1,10 +1,13 @@
-# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+# Zsh configuration file
+# Location: ~/.config/zsh/.zshrc
+
+# Enable Powerlevel10k instant prompt. Should stay close to the top of .zshrc.
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
 # Antidote plugin manager setup
-zsh_plugins=${ZDOTDIR:-$HOME}/.zsh_plugins
+zsh_plugins=${ZDOTDIR:-$HOME/.config/zsh}/.zsh_plugins
 if [[ ! ${zsh_plugins}.zsh -nt ${zsh_plugins}.txt ]]; then
   (
     source /usr/share/zsh-antidote/antidote.zsh
@@ -14,11 +17,11 @@ fi
 source ${zsh_plugins}.zsh
 
 # History configuration
-HISTFILE=~/.histfile
+HISTFILE=${ZDOTDIR:-$HOME/.config/zsh}/.zsh_history
 HISTSIZE=5000
 SAVEHIST=5000
-setopt HIST_IGNORE_ALL_DUPS  # Don't record duplicates in history
-setopt HIST_SAVE_NO_DUPS     # Don't write duplicate entries in the history file
+setopt HIST_IGNORE_ALL_DUPS
+setopt HIST_SAVE_NO_DUPS
 
 # Aliases
 alias ls='ls --color=auto'
@@ -26,7 +29,7 @@ alias grep='grep --color=auto'
 alias upgrade='sudo pacman -Syyu'
 
 # Load Powerlevel10k theme
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+[[ ! -f ${ZDOTDIR:-$HOME/.config/zsh}/.p10k.zsh ]] || source ${ZDOTDIR:-$HOME/.config/zsh}/.p10k.zsh
 
 # Environment variables
 export VISUAL='nvim'
@@ -41,7 +44,7 @@ export MANPAGER="nvim +Man!"
 
 # Completion system initialization
 autoload -Uz compinit
-compinit
+compinit -d ${ZDOTDIR:-$HOME/.config/zsh}/.zcompdump
 
 # Run fastfetch
 fastfetch
