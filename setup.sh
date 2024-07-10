@@ -81,14 +81,6 @@ fi
 # Set zsh as default shell
 chsh -s /bin/zsh
 
-# Copy .zshrc and .zsh_plugins.txt
-if prompt_user "Would you like to copy .zshrc and .zsh_plugins.txt?"; then
-    print_message "$GREEN" "Copying .zshrc and .zsh_plugins.txt..."
-    cp .zshrc ~/.zshrc
-    cp .zsh_plugins.txt ~/.zsh_plugins.txt
-    chmod 644 ~/.zshrc ~/.zsh_plugins.txt
-fi
-
 # Script completion
 print_message "$GREEN" "Script has completed. Remember to set iwd and quiet boot"
 print_message "$GREEN" "You can start Hyprland by typing Hyprland (note the capital H)."
