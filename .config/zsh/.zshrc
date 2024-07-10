@@ -30,3 +30,17 @@ alias upgrade='sudo pacman -Syyu'
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
 # PATH stuff
+
+# Env Variables 
+export VISUAL='nvim'
+export EDITOR='nvim'
+export TERMINAL='foot'
+export BROWSER='brave'
+export HISTORY_IGNORE="(ls|cd|pwd|exit|sudo reboot|history|cd -|cd ..)"
+export DMENU='fuzzel -dmenu'
+export IRQBALANCE_ARGS="--allcpus"
+export GIT_DISCOVERY_ACROSS_FILESYSTEM=false
+export MANPAGER="nvim +Man!"
+
+# Fetch
+fastfetch
