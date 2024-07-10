@@ -9,6 +9,20 @@ if [[ ! ${zsh_plugins}.zsh -nt ${zsh_plugins}.txt ]]; then
 fi
 source ${zsh_plugins}.zsh
 
+# Env Variables 
+export VISUAL='lvim'
+export EDITOR='lvim'
+export TERMINAL='foot'
+export BROWSER='brave'
+export HISTORY_IGNORE="(ls|cd|pwd|exit|sudo reboot|history|cd -|cd ..)"
+export DMENU='rofi -dmenu'
+export IRQBALANCE_ARGS="--allcpus"
+export GIT_DISCOVERY_ACROSS_FILESYSTEM=false
+export MANPAGER="lvim +Man!"
+
+# Fetch
+fastfetch
+
 # Set the file name and size for the command history
 HISTFILE=~/.histfile
 HISTSIZE=5000
