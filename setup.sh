@@ -62,7 +62,7 @@ if prompt_user "Would you like to install the packages?"; then
         brightnessctl pipewire noise-suppression-for-voice lib32-pipewire wireplumber \
         pipewire-audio pipewire-pulse pipewire-alsa pipewire-jack ladspa motivewave \
         lib32-pipewire-jack xdg-user-dirs xdg-desktop-portal-hyprland sweet-gtk-theme \
-        network-manager-applet 
+        network-manager-applet cava
 fi
 
 # Copy .config files
