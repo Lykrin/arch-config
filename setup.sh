@@ -82,7 +82,7 @@ fi
 chsh -s /bin/zsh
 
 # Script completion
-print_message "$GREEN" "Script has completed. Remember to set iwd and quiet boot"
+print_message "$GREEN" "Script has completed. Remember to set NM and quiet boot"
 print_message "$GREEN" "You can start Hyprland by typing Hyprland (note the capital H)."
 
 # Prompt for reboot
