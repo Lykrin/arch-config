@@ -8,7 +8,7 @@ NC='\033[0m' # No Color
 
 INSTLOG="install.log"
 
- Function to print colored messages
+# Function to print colored messages
 print_message() {
     local color=$1
     local message=$2
