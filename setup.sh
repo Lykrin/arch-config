@@ -73,9 +73,9 @@ if prompt_user "Would you like to copy .config files?"; then
 fi
 
 # Install NVChad
-if prompt_user "Would you like to install NVChad?"; then
-    print_message "$GREEN" "Installing NVChad..."
-    git clone https://github.com/NvChad/NvChad ~/.config/nvim --depth 1
+if prompt_user "Would you like to install LVIM?"; then
+    print_message "$GREEN" "Installing LVIM..."
+    LV_BRANCH='release-1.4/neovim-0.9' bash <(curl -s https://raw.githubusercontent.com/LunarVim/LunarVim/release-1.4/neovim-0.9/utils/installer/install.sh)
 fi
 
 # Set zsh as default shell
