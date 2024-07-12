@@ -85,7 +85,7 @@
     "format-linked": "{ifname} (No IP) ",
     "format-disconnected": "Disconnected ⚠",
     "format-alt": "{ifname}:{essid} {ipaddr}/{cidr}",
-    "on-click-right": "~/.config/waybar/scripts/fuzzel_iwd.sh"
+    "on-click-right": "networkmanager_dmenu"
   },
 //  "bluetooth": {
 //    "exec": "~/.config/waybar/scripts/rofi-bluetooth-menu --status",
