@@ -1,20 +1,33 @@
-# Zsh configuration file
-# Location: ~/.config/zsh/.zshrc
-
-# Enable Powerlevel10k instant prompt. Should stay close to the top of .zshrc.
+# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.config/zsh/.zshrc.
+# Initialization code that may require console input (password prompts, [y/n]
+# confirmations, etc.) must go above this block; everything else may go below.
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
-# Antidote plugin manager setup
-zsh_plugins=${ZDOTDIR:-$HOME/.config/zsh}/.zsh_plugins
-if [[ ! ${zsh_plugins}.zsh -nt ${zsh_plugins}.txt ]]; then
-  (
-    source /usr/share/zsh-antidote/antidote.zsh
-    antidote bundle <${zsh_plugins}.txt >${zsh_plugins}.zsh
-  )
-fi
-source ${zsh_plugins}.zsh
+#!/bin/zsh
+#
+# .zshrc - Zsh file loaded on interactive shell sessions.
+#
+
+# Zsh options.
+setopt extended_glob
+
+# Autoload functions you might want to use with antidote.
+ZFUNCDIR=${ZFUNCDIR:-$ZDOTDIR/functions}
+fpath=($ZFUNCDIR $fpath)
+autoload -Uz $fpath[1]/*(.:t)
+
+# Source zstyles you might use with antidote.
+[[ -e ${ZDOTDIR:-~}/.zstyles ]] && source ${ZDOTDIR:-~}/.zstyles
+
+# Clone antidote if necessary.
+[[ -d ${ZDOTDIR:-~}/.antidote ]] ||
+  git clone https://github.com/mattmc3/antidote ${ZDOTDIR:-~}/.antidote
+
+# Create an amazing Zsh config using antidote plugins.
+source ${ZDOTDIR:-~}/.antidote/antidote.zsh
+antidote load
 
 # History configuration
 HISTFILE=${ZDOTDIR:-$HOME/.config/zsh}/.zsh_history
@@ -26,25 +39,13 @@ setopt HIST_SAVE_NO_DUPS
 # Aliases
 alias ls='ls --color=auto'
 alias grep='grep --color=auto'
-alias upgrade='sudo pacman -Syyu'
-
-# Load Powerlevel10k theme
-[[ ! -f ${ZDOTDIR:-$HOME/.config/zsh}/.p10k.zsh ]] || source ${ZDOTDIR:-$HOME/.config/zsh}/.p10k.zsh
-
-# Environment variables
-export VISUAL='nvim'
-export EDITOR='nvim'
-export TERMINAL='foot'
-export BROWSER='brave'
-export HISTORY_IGNORE="(ls|cd|pwd|exit|sudo reboot|history|cd -|cd ..)"
-export DMENU='fuzzel -dmenu'
-export IRQBALANCE_ARGS="--allcpus"
-export GIT_DISCOVERY_ACROSS_FILESYSTEM=false
-export MANPAGER="nvim +Man!"
+alias upgrade='yay -Syyu'
 
 # Completion system initialization
-autoload -Uz compinit
-compinit -d ${ZDOTDIR:-$HOME/.config/zsh}/.zcompdump
+# autoload -Uz compinit && compinit
 
 # Run fastfetch
-fastfetch
+# fastfetch
+
+# To customize prompt, run `p10k configure` or edit ~/.config/zsh/.p10k.zsh.
+[[ ! -f ~/.config/zsh/.p10k.zsh ]] || source ~/.config/zsh/.p10k.zsh
