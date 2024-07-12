@@ -69,6 +69,8 @@ fi
 if prompt_user "Would you like to copy .config files?"; then
     print_message "$GREEN" "Copying .config files..."
     cp -R .config/* ~/.config/
+    cp -R wallpapers ~/
+    cp -R .icons ~/
     chmod +x ~/.config/waybar/scripts/* ~/.config/hypr/xdg-portal-hyprland
 fi
 
