@@ -76,9 +76,9 @@ if prompt_user "Would you like to copy .config files?"; then
 fi
 
 # Install NVChad
-if prompt_user "Would you like to install LVIM?"; then
-    print_message "$GREEN" "Installing LVIM..."
-    LV_BRANCH='release-1.4/neovim-0.9' bash <(curl -s https://raw.githubusercontent.com/LunarVim/LunarVim/release-1.4/neovim-0.9/utils/installer/install.sh)
+if prompt_user "Would you like to install Kickstart?"; then
+    print_message "$GREEN" "Installing Kickstart..."
+    git clone https://github.com/lykrin/kickstart.nvim.git "${XDG_CONFIG_HOME:-$HOME/.config}"/nvim
 fi
 
 # Set zsh as default shell
