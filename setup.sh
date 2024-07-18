@@ -52,11 +52,11 @@ fi
 # Install needed packages
 if prompt_user "Would you like to install the packages?"; then
     yay -S --noconfirm --needed \
-        zsh hyprland-git polkit-gnome ffmpeg fastfetch neovim viewnior bolt-launcher \
+        zsh hyprland polkit-gnome ffmpeg fastfetch neovim viewnior bolt-launcher \
         fuzzel pavucontrol zsh-antidote cliphist wl-clipboard clapper wttrbar \
         wf-recorder hyprpaper grimblast-git ffmpegthumbnailer btop gvfs vesktop \
         foot foot-terminfo nemo nemo-fileroller gvfs-mtp brave-bin mkinitcpio-firmware \
-        waybar-git hypridle hyprlock pamixer sweet-folders-icons-git fprintd LADSPA \
+        waybar hypridle hyprlock pamixer sweet-folders-icons-git fprintd LADSPA \
         nwg-look-bin dunst ttf-firacode-nerd noto-fonts qt5-wayland qt6-wayland \
         noto-fonts-emoji ttf-nerd-fonts-symbols-common otf-firamono-nerd networkmanager-dmenu-git \
         brightnessctl pipewire noise-suppression-for-voice lib32-pipewire wireplumber \
