@@ -49,25 +49,25 @@ else
     fi
 fi
 
-# Install needed packages
+
+# Install packages
 if prompt_user "Would you like to install the packages?"; then
     {
         echo "[$(date '+%Y-%m-%d %H:%M:%S')] Starting package installation"
         yay -S --noconfirm --needed --overwrite "/usr/lib/libjack*" -i \
-        pipewire pipewire-pulse pipewire-alsa pipewire-jack lib32-pipewire-jack \
-        lib32-pipewire wireplumber noise-suppression-for-voice pipewire-audio \
-        zsh zsh-antidote hyprland waybar hypridle hyprlock hyprpaper \
-        xdg-desktop-portal-hyprland polkit-gnome networkmanager-dmenu-git \
-        network-manager-applet ffmpeg ffmpegthumbnailer wf-recorder grimblast-git \
-        neovim foot foot-terminfo nemo nemo-fileroller gvfs gvfs-mtp \
-        fuzzel bolt-launcher pavucontrol cliphist wl-clipboard clapper wttrbar \
-        viewnior btop brave-bin vesktop mkinitcpio-firmware fprintd cava \
-        nwg-look-bin dunst pamixer brightnessctl motivewave sweet-gtk-theme \
-        sweet-folders-icons-git xdg-user-dirs fastfetch ladspa LADSPA \
-        ttf-firacode-nerd noto-fonts noto-fonts-emoji ttf-nerd-fonts-symbols-common \
-        otf-firamono-nerd qt5-wayland qt6-wayland \
+            pipewire{,-pulse,-alsa,-jack,-audio} lib32-pipewire{,-jack} wireplumber noise-suppression-for-voice \
+            zsh zsh-antidote hyprland waybar hypridle hyprlock hyprpaper \
+            xdg-desktop-portal-hyprland polkit-gnome networkmanager-dmenu-git \
+            network-manager-applet ffmpeg{,thumbnailer} wf-recorder grimblast-git \
+            neovim foot{,-terminfo} nemo{,-fileroller} gvfs{,-mtp} \
+            fuzzel bolt-launcher pavucontrol cliphist wl-clipboard clapper wttrbar \
+            viewnior btop brave-bin vesktop mkinitcpio-firmware fprintd cava \
+            nwg-look-bin dunst pamixer brightnessctl motivewave sweet-gtk-theme \
+            sweet-folders-icons-git xdg-user-dirs fastfetch ladspa LADSPA \
+            ttf-firacode-nerd noto-fonts{,-emoji} ttf-nerd-fonts-symbols-common \
+            otf-firamono-nerd qt{5,6}-wayland
         echo "[$(date '+%Y-%m-%d %H:%M:%S')] Package installation completed"
-    } 2>&1 | tee -a install.log
+    } 2>&1 | tee -a "$INSTLOG"
 fi
 
 # Copy .config files
