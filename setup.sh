@@ -49,24 +49,32 @@ else
 fi
 
 # Install packages
-if prompt_user "Would you like to install the packages?"; then
-    {
-        echo "[$(date '+%Y-%m-%d %H:%M:%S')] Starting package installation"
-        yay -S --noconfirm --needed --overwrite "/usr/lib/libjack*" -i \
-            pipewire{,-pulse,-alsa,-jack,-audio} lib32-pipewire{,-jack} wireplumber noise-suppression-for-voice \
-            zsh zsh-antidote hyprland waybar hypridle hyprlock hyprpaper \
-            xdg-desktop-portal-hyprland polkit-gnome networkmanager-dmenu-git \
-            network-manager-applet ffmpeg{,thumbnailer} wf-recorder grimblast-git \
-            neovim foot{,-terminfo} nemo{,-fileroller} gvfs{,-mtp} \
-            fuzzel bolt-launcher pavucontrol cliphist wl-clipboard clapper wttrbar \
-            viewnior btop brave-bin vesktop mkinitcpio-firmware fprintd cava \
-            nwg-look-bin dunst pamixer brightnessctl motivewave sweet-gtk-theme \
-            sweet-folders-icons-git xdg-user-dirs fastfetch ladspa LADSPA \
-            ttf-firacode-nerd noto-fonts{,-emoji} ttf-nerd-fonts-symbols-common \
-            otf-firamono-nerd qt{5,6}-wayland
-        echo "[$(date '+%Y-%m-%d %H:%M:%S')] Package installation completed"
-    } 2>&1 | tee -a "$INSTLOG"
-fi
+   if prompt_user "Would you like to install the packages?"; then
+   {
+       echo "[$(date '+%Y-%m-%d %H:%M:%S')] Starting package installation"
+       
+       # Install PipeWire and its components first
+       yay -S --noconfirm --needed \
+           pipewire{,-pulse,-alsa,-jack,-audio} lib32-pipewire{,-jack} \
+           wireplumber noise-suppression-for-voice
+       
+       # Install the rest of the packages
+       yay -S --noconfirm --needed \
+           zsh zsh-antidote \
+           hyprland waybar hypridle hyprlock hyprpaper \
+           xdg-desktop-portal-hyprland polkit-gnome networkmanager-dmenu-git \
+           network-manager-applet ffmpeg{,thumbnailer} wf-recorder grimblast-git \
+           neovim foot{,-terminfo} nemo{,-fileroller} gvfs{,-mtp} \
+           fuzzel bolt-launcher pavucontrol cliphist wl-clipboard clapper wttrbar \
+           viewnior btop brave-bin vesktop mkinitcpio-firmware fprintd cava \
+           nwg-look-bin dunst pamixer brightnessctl motivewave sweet-gtk-theme \
+           sweet-folders-icons-git xdg-user-dirs fastfetch ladspa LADSPA \
+           ttf-firacode-nerd noto-fonts{,-emoji} ttf-nerd-fonts-symbols-common \
+           otf-firamono-nerd qt{5,6}-wayland
+       
+       echo "[$(date '+%Y-%m-%d %H:%M:%S')] Package installation completed"
+   } 2>&1 | tee -a "$INSTLOG"
+   fi
 
 # Copy .config files
 if prompt_user "Would you like to copy .config files?"; then
