@@ -53,13 +53,18 @@ fi
 if prompt_user "Would you like to install the packages?"; then
     {
         echo "[$(date '+%Y-%m-%d %H:%M:%S')] Starting package installation"
-        yay -S --noconfirm --needed \
-           pipewire-jack zsh hyprland polkit-gnome ffmpeg fastfetch neovim viewnior bolt-launcher \
- fuzzel pavucontrol zsh-antidote cliphist wl-clipboard clapper wttrbar \ wf-recorder hyprpaper grimblast-git ffmpegthumbnailer btop gvfs vesktop \ foot foot-terminfo nemo nemo-fileroller gvfs-mtp brave-bin mkinitcpio-firmware \ waybar hypridle hyprlock pamixer sweet-folders-icons-git fprintd LADSPA / nwg-look-bin dunst ttf-firacode-nerd noto-fonts qt5-wayland qt6-wayland \ noto-fonts-emoji ttf-nerd-fonts-symbols-common otf-firamono-nerd networkmanager-dmenu-git \
-            brightnessctl pipewire noise-suppression-for-voice lib32-pipewire wireplumber \
-            pipewire-audio pipewire-pulse pipewire-alsa ladspa motivewave \
-            lib32-pipewire-jack xdg-user-dirs xdg-desktop-portal-hyprland sweet-gtk-theme \
-            network-manager-applet cava
+        yay -S --noconfirm --needed -i \
+        pipewire-jack pipewire noise-suppression-for-voice lib32-pipewire wireplumber \
+        pipewire-audio pipewire-pulse pipewire-alsa lib32-pipewire-jack ladspa \
+        zsh hyprland polkit-gnome ffmpeg fastfetch neovim viewnior bolt-launcher \
+        fuzzel pavucontrol zsh-antidote cliphist wl-clipboard clapper wttrbar \
+        wf-recorder hyprpaper grimblast-git ffmpegthumbnailer btop gvfs vesktop \
+        foot foot-terminfo nemo nemo-fileroller gvfs-mtp brave-bin mkinitcpio-firmware \
+        waybar hypridle hyprlock pamixer sweet-folders-icons-git fprintd cava LADSPA \
+        nwg-look-bin dunst ttf-firacode-nerd noto-fonts qt5-wayland qt6-wayland \
+        noto-fonts-emoji ttf-nerd-fonts-symbols-common otf-firamono-nerd networkmanager-dmenu-git \
+        brightnessctl motivewave network-manager-applet \
+        xdg-user-dirs xdg-desktop-portal-hyprland sweet-gtk-theme \
         echo "[$(date '+%Y-%m-%d %H:%M:%S')] Package installation completed"
     } 2>&1 | tee -a install.log
 fi
