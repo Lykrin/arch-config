@@ -122,9 +122,9 @@
         "format-disconnected": " 󰖪 ",
         "tooltip-format-disconnected": "Disconnected",
         "format-alt": "{essid}",
-//        "format-alt": "<span foreground='#99ffdd'> {bandwidthDownBytes}</span> <span foreground='#ffcc66'> {bandwidthUpBytes}</span>",
+        "format-alt": "<span foreground='#99ffdd'> {bandwidthDownBytes}</span> <span foreground='#ffcc66'> {bandwidthUpBytes}</span>",
         "interval": 2,
-        "on-click-right": "~/.config/waybar/scripts/network.py"
+        "on-click-right": "networkmanager_dmenu"
   },
 //  "bluetooth": {
 //    "exec": "~/.config/waybar/scripts/rofi-bluetooth-menu --status",
