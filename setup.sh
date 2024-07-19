@@ -75,10 +75,19 @@ if prompt_user "Would you like to copy .config files?"; then
     cp -R wallpapers ~/
     cp -R .icons ~/
     cp -R .zshenv ~/
+    sudo cp -f loader.conf /boot/loader/
+    sudo cp -f mkinitcpio.conf /etc/
+    sudo cp -f vconsole.conf /etc/
     chmod +x ~/.config/waybar/scripts/* ~/.config/hypr/xdg-portal-hyprland
 fi
 
-# Install NVChad
+# Append Silent Boot Files
+if prompt_user "Would you like to set up silent boot?"; then
+    print_message "$GREEN" "Setting up silent boot..."
+    sudo find /boot/loader/entries/ -name '*linux-zen.conf' -exec sed -i '/^options/ s/$/ quiet loglevel=2 systemd.show_status=auto rd.udev.log_level=2/' {} +
+fi
+
+# Install Kickstart
 if prompt_user "Would you like to install Kickstart?"; then
     print_message "$GREEN" "Installing Kickstart..."
     git clone https://github.com/lykrin/kickstart.nvim.git "${XDG_CONFIG_HOME:-$HOME/.config}"/nvim
