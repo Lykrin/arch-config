@@ -1,71 +1,77 @@
 #!/bin/sh
 
-iDIR="$HOME/.config/waybar/icons"
+ICON_DIR="$HOME/.config/waybar/icons"
 
 get_volume() {
     pamixer --get-volume
 }
 
 get_icon() {
-    vol=$(get_volume)
-    if   [ "$vol" -eq 0  ]; then echo "$iDIR/volume-mute.png"
-    elif [ "$vol" -le 30 ]; then echo "$iDIR/volume-low.png"
-    elif [ "$vol" -le 60 ]; then echo "$iDIR/volume-mid.png"
-    else echo "$iDIR/volume-high.png"
+    local volume=$(get_volume)
+    if [ "$volume" -eq 0 ]; then
+        echo "$ICON_DIR/volume-mute.png"
+    elif [ "$volume" -le 30 ]; then
+        echo "$ICON_DIR/volume-low.png"
+    elif [ "$volume" -le 60 ]; then
+        echo "$ICON_DIR/volume-mid.png"
+    else
+        echo "$ICON_DIR/volume-high.png"
     fi
 }
 
 notify_user() {
-    notify-send -h string:x-canonical-private-synchronous:sys-notify -u low \
-                -i "$(get_icon)" "Volume : $(get_volume) %"
+    notify-send -h string:x-canonical-private-synchronous:sys-notify -u low -i "$(get_icon)" "Volume: $(get_volume)%"
 }
 
-change_volume() {
-    pamixer $1 && notify_user
+adjust_volume() {
+    pamixer $1 $2 && notify_user
 }
 
 toggle_mute() {
-    if pamixer --get-mute; then
-        pamixer -u && notify-send -h string:x-canonical-private-synchronous:sys-notify -u low \
-                                  -i "$(get_icon)" "Volume Switched ON"
+    local state=$(pamixer --get-mute)
+    local icon="$ICON_DIR/volume-mute.png"
+    local message="Volume Switched OFF"
+    
+    if [ "$state" = "true" ]; then
+        pamixer -u
+        icon="$(get_icon)"
+        message="Volume Switched ON"
     else
-        pamixer -m && notify-send -h string:x-canonical-private-synchronous:sys-notify -u low \
-                                  -i "$iDIR/volume-mute.png" "Volume Switched OFF"
+        pamixer -m
     fi
+    
+    notify-send -h string:x-canonical-private-synchronous:sys-notify -u low -i "$icon" "$message"
 }
 
 toggle_mic() {
-    if pamixer --default-source --get-mute; then
-        pamixer --default-source -u && notify-send -h string:x-canonical-private-synchronous:sys-notify -u low \
-                                                   -i "$iDIR/microphone.png" "Microphone Switched ON"
+    local state=$(pamixer --default-source --get-mute)
+    local icon="$ICON_DIR/microphone-mute.png"
+    local message="Microphone Switched OFF"
+    
+    if [ "$state" = "true" ]; then
+        pamixer --default-source -u
+        icon="$ICON_DIR/microphone.png"
+        message="Microphone Switched ON"
     else
-        pamixer --default-source -m && notify-send -h string:x-canonical-private-synchronous:sys-notify -u low \
-                                                   -i "$iDIR/microphone-mute.png" "Microphone Switched OFF"
+        pamixer --default-source -m
     fi
-}
-
-get_mic_icon() {
-    echo "$iDIR/microphone.png"
+    
+    notify-send -h string:x-canonical-private-synchronous:sys-notify -u low -i "$icon" "$message"
 }
 
 notify_mic_user() {
-    notify-send -h string:x-canonical-private-synchronous:sys-notify -u low \
-                -i "$(get_mic_icon)" "Mic-Level : $(pamixer --default-source --get-volume) %"
-}
-
-change_mic_volume() {
-    pamixer --default-source $1 && notify_mic_user
+    notify-send -h string:x-canonical-private-synchronous:sys-notify -u low -i "$ICON_DIR/microphone.png" "Mic-Level: $(pamixer --default-source --get-volume)%"
 }
 
 case "$1" in
-    --get)        get_volume ;;
-    --inc)        change_volume "-i 5" ;;
-    --dec)        change_volume "-d 5" ;;
-    --toggle)     toggle_mute ;;
+    --get) get_volume ;;
+    --inc) adjust_volume -i 5 ;;
+    --dec) adjust_volume -d 5 ;;
+    --toggle) toggle_mute ;;
     --toggle-mic) toggle_mic ;;
-    --get-icon)   get_icon ;;
-    --get-mic-icon) get_mic_icon ;;
-    --mic-inc)    change_mic_volume "-i 5" ;;
-    --mic-dec)    change_mic_volume "-d 5" ;;
-    *)            get_volume ;;
+    --get-icon) get_icon ;;
+    --get-mic-icon) echo "$ICON_DIR/microphone.png" ;;
+    --mic-inc) pamixer --default-source -i 5 && notify_mic_user ;;
+    --mic-dec) pamixer --default-source -d 5 && notify_mic_user ;;
+    *) get_volume ;;
 esac
