@@ -5,7 +5,6 @@ RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[0;33m'
 NC='\033[0m' # No Color
-
 INSTLOG="install.log"
 
 # Function to print colored messages
@@ -49,7 +48,6 @@ else
     fi
 fi
 
-
 # Install packages
 if prompt_user "Would you like to install the packages?"; then
     {
@@ -84,6 +82,15 @@ fi
 if prompt_user "Would you like to install Kickstart?"; then
     print_message "$GREEN" "Installing Kickstart..."
     git clone https://github.com/lykrin/kickstart.nvim.git "${XDG_CONFIG_HOME:-$HOME/.config}"/nvim
+fi
+
+# Implement udev rule for mic mute LED
+if prompt_user "Would you like to implement the udev rule for the mic mute LED?"; then
+    print_message "$GREEN" "Implementing udev rule for mic mute LED..."
+    echo 'ACTION=="add", SUBSYSTEM=="leds", KERNEL=="platform::micmute" ATTR{trigger}="audio-micmute"' | sudo tee /etc/udev/rules.d/micmute-led.rules > /dev/null
+    sudo udevadm control --reload-rules
+    sudo udevadm trigger
+    print_message "$GREEN" "udev rule implemented and triggered."
 fi
 
 # Set zsh as default shell
