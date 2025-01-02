@@ -45,11 +45,11 @@ alias upgrade='yay -Syyu'
 # autoload -Uz compinit && compinit
 
 # Run fastfetch
-# fastfetch
+ fastfetch
 
-if uwsm check may-start && uwsm select; then
-  exec systemd-cat -t uwsm_start uwsm start default
-fi
+#if uwsm check may-start && uwsm select; then
+#  exec systemd-cat -t uwsm_start uwsm start #default
+#fi
 
 # To customize prompt, run `p10k configure` or edit ~/.config/zsh/.p10k.zsh.
 [[ ! -f ~/.config/zsh/.p10k.zsh ]] || source ~/.config/zsh/.p10k.zsh
