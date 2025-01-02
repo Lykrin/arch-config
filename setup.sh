@@ -62,7 +62,7 @@ fi
        yay -S --noconfirm --needed \
            zsh zsh-antidote \
            hyprland waybar hypridle hyprlock hyprpaper \
-           xdg-desktop-portal-hyprland polkit-gnome networkmanager-dmenu-git \
+           xdg-desktop-portal-hyprland hyprpolkitagent networkmanager-dmenu-git \
            network-manager-applet ffmpeg{,thumbnailer} wf-recorder grimblast-git \
            neovim foot{,-terminfo} nemo{,-fileroller} gvfs{,-mtp} \
            fuzzel bolt-launcher pavucontrol cliphist wl-clipboard clapper wttrbar \
