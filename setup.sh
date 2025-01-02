@@ -64,7 +64,7 @@ fi
            hyprland waybar hypridle hyprlock hyprpaper \
            xdg-desktop-portal-hyprland hyprpolkitagent networkmanager-dmenu-git \
            network-manager-applet ffmpeg{,thumbnailer} wf-recorder grimblast-git \
-           neovim foot{,-terminfo} nemo{,-fileroller} gvfs{,-mtp} \
+    uwsm  neovim foot{,-terminfo} nemo{,-fileroller} gvfs{,-mtp} \
            fuzzel bolt-launcher pavucontrol cliphist wl-clipboard clapper wttrbar \
            viewnior btop brave-bin vesktop mkinitcpio-firmware fprintd cava \
            nwg-look-bin dunst pamixer brightnessctl motivewave sweet-gtk-theme \
