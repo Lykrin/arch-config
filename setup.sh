@@ -57,11 +57,12 @@ fi
        yay -S --noconfirm --needed \
            pipewire{,-pulse,-alsa,-jack,-audio} lib32-pipewire{,-jack} \
            wireplumber noise-suppression-for-voice
+
+yay -S --noconfirm --needed hyprland-git
        
        # Install the rest of the packages
        yay -S --noconfirm --needed \
-           fish \
-           hyprland-git hyprcursor-git waybar hypridle-git hyprlock-git hyprpaper-git \
+           fish \ hyprcursor-git waybar-git hypridle-git hyprlock-git hyprpaper-git \
            xdg-desktop-portal-hyprland hyprpolkitagent networkmanager-dmenu-git \
            network-manager-applet ib-tws ffmpeg{,thumbnailer} wf-recorder grimblast-git \
     uwsm  neovim foot{,-terminfo} nemo{,-fileroller} gvfs{,-mtp} \
@@ -83,7 +84,7 @@ if prompt_user "Would you like to copy .config files?"; then
     cp -R wallpapers ~/
     cp -R .icons ~/
 #   cp -R .zshenv ~/
-#    sudo cp -f loader.conf /boot/loader/
+    sudo cp -f loader.conf /boot/loader/
 #    sudo cp -f mkinitcpio.conf /etc/
 #    sudo cp -f vconsole.conf /etc/
     chmod +x ~/.config/waybar/scripts/* ~/.config/hypr/xdg-portal-hyprland
