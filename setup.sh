@@ -60,13 +60,13 @@ fi
        
        # Install the rest of the packages
        yay -S --noconfirm --needed \
-           zsh zsh-antidote \
-           hyprland waybar hypridle hyprlock hyprpaper \
+           fish \
+           hyprland-git waybar hypridle-git hyprlock-git hyprpaper-git \
            xdg-desktop-portal-hyprland hyprpolkitagent networkmanager-dmenu-git \
            network-manager-applet ffmpeg{,thumbnailer} wf-recorder grimblast-git \
     uwsm  neovim foot{,-terminfo} nemo{,-fileroller} gvfs{,-mtp} \
            fuzzel bolt-launcher pavucontrol cliphist wl-clipboard clapper wttrbar \
-           viewnior btop brave-bin vesktop mkinitcpio-firmware fprintd cava \
+           viewnior btop vivaldi vesktop mkinitcpio-firmware fprintd cava \
            nwg-look-bin dunst pamixer brightnessctl motivewave sweet-gtk-theme \
            sweet-folders-icons-git xdg-user-dirs fastfetch ladspa LADSPA \
            ttf-firacode-nerd noto-fonts{,-emoji} ttf-nerd-fonts-symbols-common \
@@ -82,10 +82,10 @@ if prompt_user "Would you like to copy .config files?"; then
     cp -R .config/* ~/.config/
     cp -R wallpapers ~/
     cp -R .icons ~/
-    cp -R .zshenv ~/
-    sudo cp -f loader.conf /boot/loader/
-    sudo cp -f mkinitcpio.conf /etc/
-    sudo cp -f vconsole.conf /etc/
+#   cp -R .zshenv ~/
+#    sudo cp -f loader.conf /boot/loader/
+#    sudo cp -f mkinitcpio.conf /etc/
+#    sudo cp -f vconsole.conf /etc/
     chmod +x ~/.config/waybar/scripts/* ~/.config/hypr/xdg-portal-hyprland
 fi
 
@@ -96,10 +96,10 @@ if prompt_user "Would you like to set up silent boot?"; then
 fi
 
 # Install Kickstart
-if prompt_user "Would you like to install Kickstart?"; then
-    print_message "$GREEN" "Installing Kickstart..."
-    git clone https://github.com/lykrin/kickstart.nvim.git "${XDG_CONFIG_HOME:-$HOME/.config}"/nvim
-fi
+#if prompt_user "Would you like to install #Kickstart?"; then
+#    print_message "$GREEN" "Installing #Kickstart..."
+#    git clone #https://github.com/lykrin/kickstart.nvim.git #"${XDG_CONFIG_HOME:-$HOME/.config}"/nvim
+#fi
 
 # Implement udev rule for mic mute LED
 if prompt_user "Would you like to implement the udev rule for the mic mute LED?"; then
