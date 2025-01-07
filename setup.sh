@@ -62,10 +62,10 @@ yay -S --noconfirm --needed hyprland-git
        
        # Install the rest of the packages
        yay -S --noconfirm --needed \
-           fish \ hyprcursor-git waybar-git hypridle-git hyprlock-git hyprpaper-git \
-           xdg-desktop-portal-hyprland hyprpolkitagent networkmanager-dmenu-git \
+           hypridle-git hyprlock-git hyprpaper-git hyprpolkitagent-git \
+           xdg-desktop-portal-hyprland-git fish waybar-git networkmanager-dmenu-git \
            network-manager-applet ib-tws ffmpeg{,thumbnailer} wf-recorder grimblast-git \
-    uwsm  neovim foot{,-terminfo} nemo{,-fileroller} gvfs{,-mtp} \
+           uwsm  neovim foot{,-terminfo} nemo{,-fileroller} gvfs{,-mtp} \
            fuzzel bolt-launcher pavucontrol cliphist wl-clipboard clapper wttrbar \
            viewnior btop vivaldi vesktop mkinitcpio-firmware fprintd cava \
            nwg-look-bin dunst pamixer brightnessctl motivewave sweet-gtk-theme \
