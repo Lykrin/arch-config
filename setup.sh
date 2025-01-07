@@ -61,9 +61,9 @@ fi
        # Install the rest of the packages
        yay -S --noconfirm --needed \
            fish \
-           hyprland-git waybar hypridle-git hyprlock-git hyprpaper-git \
+           hyprland-git hyprcursor-git waybar hypridle-git hyprlock-git hyprpaper-git \
            xdg-desktop-portal-hyprland hyprpolkitagent networkmanager-dmenu-git \
-           network-manager-applet ffmpeg{,thumbnailer} wf-recorder grimblast-git \
+           network-manager-applet ib-tws ffmpeg{,thumbnailer} wf-recorder grimblast-git \
     uwsm  neovim foot{,-terminfo} nemo{,-fileroller} gvfs{,-mtp} \
            fuzzel bolt-launcher pavucontrol cliphist wl-clipboard clapper wttrbar \
            viewnior btop vivaldi vesktop mkinitcpio-firmware fprintd cava \
@@ -111,7 +111,7 @@ if prompt_user "Would you like to implement the udev rule for the mic mute LED?"
 fi
 
 # Set zsh as default shell
-chsh -s /bin/zsh
+# chsh -s /bin/zsh
 
 # Script completion
 print_message "$GREEN" "Script has completed. Remember to set NM and quiet boot"
