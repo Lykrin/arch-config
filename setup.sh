@@ -96,14 +96,7 @@ if prompt_user "Would you like to set up silent boot?"; then
     sudo find /boot/loader/entries/ -name '*linux-zen.conf' -exec sed -i '/^options/ s/$/ quiet loglevel=2 systemd.show_status=auto rd.udev.log_level=2/' {} +
 fi
 
-# Implement udev rule for mic mute LED
-if prompt_user "Would you like to implement the udev rule for the mic mute LED?"; then
-    print_message "$GREEN" "Implementing udev rule for mic mute LED..."
-    echo 'ACTION=="add", SUBSYSTEM=="leds", KERNEL=="platform::micmute" ATTR{trigger}="audio-micmute"' | sudo tee /etc/udev/rules.d/micmute-led.rules > /dev/null
-    sudo udevadm control --reload-rules
-    sudo udevadm trigger
-    print_message "$GREEN" "udev rule implemented and triggered."
-fi
+# Implement udev rule for mic mute LED to be done
 
 # Set fish as default shell
 chsh -s /bin/fish
