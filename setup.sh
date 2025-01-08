@@ -85,8 +85,8 @@ if prompt_user "Would you like to copy .config files?"; then
     cp -R .icons ~/
 #   cp -R .zshenv ~/
     sudo cp -f loader.conf /boot/loader/
-#    sudo cp -f mkinitcpio.conf /etc/
-#    sudo cp -f vconsole.conf /etc/
+    sudo cp -f mkinitcpio.conf /etc/
+    sudo cp -f vconsole.conf /etc/
     chmod +x ~/.config/waybar/scripts/* ~/.config/hypr/xdg-portal-hyprland
 fi
 
@@ -95,12 +95,6 @@ if prompt_user "Would you like to set up silent boot?"; then
     print_message "$GREEN" "Setting up silent boot..."
     sudo find /boot/loader/entries/ -name '*linux-zen.conf' -exec sed -i '/^options/ s/$/ quiet loglevel=2 systemd.show_status=auto rd.udev.log_level=2/' {} +
 fi
-
-# Install Kickstart
-#if prompt_user "Would you like to install #Kickstart?"; then
-#    print_message "$GREEN" "Installing #Kickstart..."
-#    git clone #https://github.com/lykrin/kickstart.nvim.git #"${XDG_CONFIG_HOME:-$HOME/.config}"/nvim
-#fi
 
 # Implement udev rule for mic mute LED
 if prompt_user "Would you like to implement the udev rule for the mic mute LED?"; then
@@ -112,7 +106,13 @@ if prompt_user "Would you like to implement the udev rule for the mic mute LED?"
 fi
 
 # Set zsh as default shell
-# chsh -s /bin/zsh
+chsh -s /bin/fish
+
+#Install Fisher 
+curl -sL https://raw.githubusercontent.com/jorgebucaran/fisher/main/functions/fisher.fish | source && fisher install jorgebucaran/fisher
+
+#Install Tidy
+fisher install IlanCosman/tide@v6
 
 # Script completion
 print_message "$GREEN" "Script has completed. Remember to set NM and quiet boot"
