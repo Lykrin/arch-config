@@ -83,7 +83,6 @@ if prompt_user "Would you like to copy .config files?"; then
     cp -R .config/* ~/.config/
     cp -R wallpapers ~/
     cp -R .icons ~/
-#   cp -R .zshenv ~/
     sudo cp -f loader.conf /boot/loader/
     sudo cp -f mkinitcpio.conf /etc/
     sudo cp -f vconsole.conf /etc/
@@ -105,7 +104,7 @@ if prompt_user "Would you like to implement the udev rule for the mic mute LED?"
     print_message "$GREEN" "udev rule implemented and triggered."
 fi
 
-# Set zsh as default shell
+# Set fish as default shell
 chsh -s /bin/fish
 
 #Install Fisher 
@@ -113,6 +112,12 @@ curl -sL https://raw.githubusercontent.com/jorgebucaran/fisher/main/functions/fi
 
 #Install Tidy
 fisher install IlanCosman/tide@v6
+
+# Install Kickstart
+if prompt_user "Would you like to install #Kickstart?"; then
+    print_message "$GREEN" "Installing #Kickstart..."
+    git clone #https://github.com/lykrin/kickstart.nvim.git #"${XDG_CONFIG_HOME:-$HOME/.config}"/nvim
+fi
 
 # Script completion
 print_message "$GREEN" "Script has completed. Remember to set NM and quiet boot"
