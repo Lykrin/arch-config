@@ -1,0 +1,63 @@
+#!/bin/bash
+export GDK_CORE_DEVICE_EVENTS=1
+# MotiveWave should be installed under the following directory
+SCRIPTDIR=/usr/share/motivewave
+
+# Classpath: dynamically load all jar files in the "jar" directory
+CP=""
+for entry in "$SCRIPTDIR/jar/"*.jar
+do
+CP+=":$entry"
+done
+# trim the first ':'
+CP=$(echo $CP | cut -c 2-)
+
+# Maximum Heap. By default, this will be one quarter of the system memory. Optionally, this can be hardcoded (see below)
+MAX_HEAP="-Xmx16G" # 16 GB für die JVM
+# Maximum VRAM. By default, this will be 8192 MB. Optionally, this can be hardcoded (see below)
+MAX_VRAM="8192M" # 8 GB für den Video RAM
+# Additional VM arguments (in deiner aktuellen Version wird nur ein Argument gesetzt, das überschreiben wird)
+VM_ARGS=""
+
+# Scaling does not seem to be picked up automatically and defaults to 100% (at least on the desktops that we tested)
+# Try to get the scale setting for the gnome desktop, but typically this seems to return 0...
+gsettings get org.gnome.desktop.interface scaling-factor
+SCALE=`gsettings get org.gnome.desktop.interface scaling-factor | awk '{print $2}'`
+
+# If this is 0, then try to guess from the screen resolution
+if [[ $SCALE == 0 || $SCALE == "" || !($SCALE =~ ^[0-9]*[.]?[0-9]*$) ]]; then
+xrandr --query | grep -A 1 "connected primary" | grep -v connected
+H=`xrandr --query | grep -A 1 "connected primary" | grep -v connected | awk '{print $1}' | awk -Fx '{print $2}'`
+echo "Resolution: $H"
+SCALE=1
+if [[ $H -gt 1800 ]]; then SCALE=2; fi
+if [[ $H -gt 4000 ]]; then SCALE=3; fi
+fi
+
+# Convert this to a percentage
+SCALE=$(echo "$SCALE*100" | bc)
+SCALE=${SCALE%.*}
+SCALE+="%"
+
+# Pull information from the .settings file in the motivewave directory
+SETTINGS_FILE=~/.motivewave/startup.ini
+
+if [ -f ${SETTINGS_FILE} ]
+then
+source ${SETTINGS_FILE}
+
+# Setzen von MAX_HEAP aus startup.ini
+[[ -n "${MAX_HEAP}" ]] && MAX_HEAP="-Xmx${MAX_HEAP}"
+
+# Setzen von MAX_VRAM aus startup.ini
+[[ -n "${MAX_VRAM}" ]] && MAX_VRAM="-Dprism.maxvram=${MAX_VRAM}"
+
+# Einzeln aufgesetzte VM-Argumente für bessere Flexibilität
+[[ -n "${VM_ARGS_1}" ]] && VM_ARGS_1="-XX:+UseG1GC"
+[[ -n "${VM_ARGS_2}" ]] && VM_ARGS_2="-XX:parallelGCThreads=4"
+[[ -n "${VM_ARGS_3}" ]] && VM_ARGS_3="-Dsun.java2d.opengl=true"
+[[ -n "${VM_ARGS_4}" ]] && VM_ARGS_4="-XX:+AlwaysPreTouch"
+fi
+
+# Startaufruf der JVM mit den neuen Argumenten
+$SCRIPTDIR/jre/bin/motivewave $MAX_HEAP $VM_ARGS_1 $VM_ARGS_2 $VM_ARGS_3 $VM_ARGS_4 -Djdk.gtk.version=2 -Dprism.forceGPU=true -Dsun.java2d.opengl=true -Dprism.order=es2,es1,sw,j2d -Dsun.java2d.pmoffscreen=false -Dprism.vsync=false -Dprism.lcdtext=false -Dawt.useSystemAAFontSettings=false -javaagent:"$SCRIPTDIR/jar/MotiveWave.jar" -Dname="MotiveWave" -Djava.library.path="$SCRIPTDIR/lib" -DUserHome="$HOME" -Duser.dir="$HOME" -DappDir="$SCRIPTDIR" -DLibraryDirectory="$HOME/Library" -DDocumentsDirectory="$HOME/Documents" -DCachesDirectory="$HOME/Library/Caches" -DDesktopDirectory="$HOME/Desktop" -DDownloadsDirectory="$HOME/Downloads" -DSharedPublicDirectory="$HOME/Public" -Dprism.verbose=true -Dglass.gtk.uiScale=$SCALE -Dsun.java2d.uiScale=$SCALE -p "$SCRIPTDIR/javafx" --add-modules=javafx.controls,javafx.base,javafx.graphics,javafx.media,javafx.web,javafx.swing --add-exports javafx.web/com.sun.webkit.network=ALL-UNNAMED -classpath "$CP" MotiveWave
