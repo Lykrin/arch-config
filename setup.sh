@@ -71,7 +71,7 @@ yay -S --noconfirm --needed hyprland-git
            nwg-look-bin dunst pamixer brightnessctl motivewave sweet-gtk-theme \
            sweet-folders-icons-git xdg-user-dirs fastfetch ladspa LADSPA \
            ttf-firacode-nerd noto-fonts{,-emoji} ttf-nerd-fonts-symbols-common \
-           otf-firamono-nerd qt{5,6}-wayland
+           otf-firamono-nerd qt5-wayland qt6-wayland
        
        echo "[$(date '+%Y-%m-%d %H:%M:%S')] Package installation completed"
    } 2>&1 | tee -a "$INSTLOG"
