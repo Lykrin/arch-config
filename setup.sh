@@ -86,6 +86,7 @@ if prompt_user "Would you like to copy .config files?"; then
     sudo cp -f loader.conf /boot/loader/
     sudo cp -f mkinitcpio.conf /etc/
     sudo cp -f vconsole.conf /etc/
+    sudo cp -f motivewave /bin/
     chmod +x ~/.config/waybar/scripts/* ~/.config/hypr/xdg-portal-hyprland
 fi
 
