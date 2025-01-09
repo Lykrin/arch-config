@@ -57,14 +57,16 @@ fi
        yay -S --noconfirm --needed \
            pipewire{,-pulse,-alsa,-jack,-audio} lib32-pipewire{,-jack} \
            wireplumber noise-suppression-for-voice
-
-yay -S --noconfirm --needed hyprland-git
-       
+           
+       # Install PipeWire and its components first
+       yay -S --noconfirm --needed \
+           hyprland
+           
        # Install the rest of the packages
        yay -S --noconfirm --needed \
-           hypridle-git hyprlock-git hyprpaper-git hyprpolkitagent-git \
-           xdg-desktop-portal-hyprland-git fish waybar-git networkmanager-dmenu-git \
-           network-manager-applet ib-tws ffmpeg{,thumbnailer} wf-recorder grimblast-git \
+           hypridle hyprlock hyprpaper hyprpolkitagent \
+           xdg-desktop-portal-hyprland fish waybar networkmanager-dmenu \
+           network-manager-applet ib-tws ffmpeg{,thumbnailer} wf-recorder grimblast \
            uwsm  neovim foot{,-terminfo} nemo{,-fileroller} gvfs{,-mtp} \
            fuzzel bolt-launcher pavucontrol cliphist wl-clipboard clapper wttrbar \
            viewnior btop vivaldi vesktop mkinitcpio-firmware fprintd cava \
@@ -74,7 +76,7 @@ yay -S --noconfirm --needed hyprland-git
            otf-firamono-nerd qt5-wayland qt6-wayland
        
        echo "[$(date '+%Y-%m-%d %H:%M:%S')] Package installation completed"
-   } 2>&1 | 2>> "$INSTLOG"
+   } 2>&1 | tee -a "$INSTLOG"
    fi
 
 # Copy .config files
