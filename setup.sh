@@ -107,13 +107,13 @@ fi
 # to be done
 
 # Set fish as default shell
-chsh -s /bin/fish
+#chsh -s /bin/fish
 
 #Install Fisher 
-curl -sL https://raw.githubusercontent.com/jorgebucaran/fisher/main/functions/fisher.fish | source && fisher install jorgebucaran/fisher
+#curl -sL https://raw.githubusercontent.com/jorgebucaran/fisher/main/functions/fisher.fish | source && fisher install jorgebucaran/fisher
 
 #Install Tidy
-fisher install IlanCosman/tide@v6
+#fisher install IlanCosman/tide@v6
 
 # Install Kickstart
 if prompt_user "Would you like to install #Kickstart?"; then
