@@ -96,7 +96,15 @@ if prompt_user "Would you like to set up silent boot?"; then
     sudo find /boot/loader/entries/ -name '*linux-zen.conf' -exec sed -i '/^options/ s/$/ quiet loglevel=2 systemd.show_status=auto rd.udev.log_level=2/' {} +
 fi
 
-# Implement udev rule for mic mute LED to be done
+
+# Fix the Flickering
+if prompt_user "Would you like to fix the Artifacts?"; then
+    print_message "$GREEN" "Setting up panel refresh..."
+    sudo find /boot/loader/entries/ -name '*linux-zen.conf' -exec sed -i '/^options/ s/$/ amdgpu.dcdebugmask=0x10' {} +
+fi
+
+# Implement udev rule for mic mute LED
+# to be done
 
 # Set fish as default shell
 chsh -s /bin/fish
