@@ -118,7 +118,7 @@ fi
 # Install Kickstart
 if prompt_user "Would you like to install #Kickstart?"; then
     print_message "$GREEN" "Installing #Kickstart..."
-    git clone #https://github.com/lykrin/kickstart.nvim.git #"${XDG_CONFIG_HOME:-$HOME/.config}"/nvim
+    git clone https://github.com/lykrin/kickstart.nvim.git "${XDG_CONFIG_HOME:-$HOME/.config}"/nvim
 fi
 
 # Script completion
