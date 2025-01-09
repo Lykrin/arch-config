@@ -98,7 +98,7 @@ yay -S --noconfirm --needed fish waybar networkmanager-dmenu \
     motivewave mkinitcpio-firmware ib-tws nwg-look bolt-launcher bibata-cursor-theme-bin
        
        echo "[$(date '+%Y-%m-%d %H:%M:%S')] Package installation completed"
-   } 2>&1 | grep -E "error|warning|critical|failed" | tee -a "$INSTLOG"
+   } 2>&1 tee -a "$INSTLOG"
    fi
 
 # Copy .config files
