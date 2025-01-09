@@ -74,7 +74,7 @@ yay -S --noconfirm --needed hyprland-git
            otf-firamono-nerd qt5-wayland qt6-wayland
        
        echo "[$(date '+%Y-%m-%d %H:%M:%S')] Package installation completed"
-   } 2>&1 | tee -a "$INSTLOG"
+   } 2>&1 | 2>> "$INSTLOG"
    fi
 
 # Copy .config files
