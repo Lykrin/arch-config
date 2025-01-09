@@ -41,7 +41,7 @@ else
         git clone https://aur.archlinux.org/yay.git &>> $INSTLOG
         (cd yay && makepkg -si --noconfirm) &>> $INSTLOG
         rm -rf yay
-        yay -Syu --noconfirm
+        yay -Syu --sudoloop --noconfirm
     else
         print_message "$RED" "Yay is required for this script, now exiting"
         exit 1
@@ -53,45 +53,49 @@ fi
    {
        echo "[$(date '+%Y-%m-%d %H:%M:%S')] Starting package installation"
        
-    # Install PipeWire and its components first
-    yay -S --noconfirm --needed \
-           pipewire{,-pulse,-alsa,-jack,-audio} lib32-pipewire{,-jack} \
-           wireplumber noise-suppression-for-voice 
-    # Install Hyprland dependencies first
-    yay -S --noconfirm --needed \
-        cmake ninja meson wayland-protocols \
-        libxcb xcb-proto xcb-util xcb-util-keysyms \
-        libxfixes libx11 libxcomposite \
-        xorg-xinput libxrender pixman \
-        wayland-protocols libdrm libxkbcommon \
-        xcb-util-wm xorg-xwayland glslang \
-        qt6-wayland hyprlang pugixml hyprutils-git
-        
-    # Install Hyprland components in correct order
-    yay -S --noconfirm --needed \
-        glaze \
-        hyprwayland-scanner-git \
-        hyprland-protocols-git \
-        hyprlang-git \
-        hyprcursor-git \
-        hyprgraphics-git \
-        hyprland-qt-support-git \
-        hyprland-qtutils-git \
-        aquamarine-git \
-        hyprland-git
-           
-       # Install the rest of the packages
-       yay -S --noconfirm --needed \
-           hypridle-git hyprlock-git hyprpaper-git hyprpolkitagent-git \
-           xdg-desktop-portal-hyprland-git fish waybar networkmanager-dmenu \
-           network-manager-applet ib-tws ffmpeg{,thumbnailer} wf-recorder grimblast \
-           uwsm  neovim foot{,-terminfo} nemo{,-fileroller} gvfs{,-mtp} \
-           fuzzel bolt-launcher pavucontrol cliphist wl-clipboard clapper wttrbar \
-           viewnior btop vivaldi vesktop mkinitcpio-firmware fprintd cava \
-           nwg-look-bin dunst pamixer brightnessctl motivewave sweet-gtk-theme \
-           sweet-folders-icons-git xdg-user-dirs fastfetch ladspa LADSPA \
-           ttf-firacode-nerd noto-fonts{,-emoji} ttf-nerd-fonts-symbols-common \
-           otf-firamono-nerd qt5-wayland qt6-wayland
+# Base dependencies first
+yay -S --noconfirm --needed cmake ninja meson wayland-protocols \
+    libxcb xcb-proto xcb-util xcb-util-keysyms libxfixes libx11 \
+    libxcomposite xorg-xinput libxrender pixman wayland-protocols \
+    libdrm libxkbcommon xcb-util-wm xorg-xwayland glslang \
+    qt6-wayland pugixml
+
+# Audio stack
+yay -S --noconfirm --needed pipewire pipewire-pulse pipewire-alsa \
+    pipewire-jack pipewire-audio lib32-pipewire lib32-pipewire-jack \
+    wireplumber noise-suppression-for-voice
+
+# Install git versions with force flag
+yay -S --noconfirm --needed --overwrite "*" \
+    hyprutils-git \
+    hyprlang-git \
+    hyprwayland-scanner-git \
+    hyprland-protocols-git \
+    hyprgraphics-git \
+    hyprland-qt-support-git \
+    hyprland-qtutils-git \
+    hyprcursor-git \
+    aquamarine-git \
+    hyprland-git
+
+# Install additional utilities after core components
+yay -S --noconfirm --needed --overwrite "*" \
+    hypridle-git \
+    hyprlock-git \
+    hyprpaper-git \
+    hyprpolkitagent-git \
+    xdg-desktop-portal-hyprland-git
+
+# Rest of the packages
+yay -S --noconfirm --needed fish waybar networkmanager-dmenu \
+    network-manager-applet ffmpeg ffmpegthumbnailer wf-recorder \
+    grimblast-git uwsm neovim foot foot-terminfo nemo nemo-fileroller \
+    gvfs gvfs-mtp fuzzel pavucontrol cliphist wl-clipboard clapper \
+    wttrbar viewnior btop vivaldi vesktop fprintd cava dunst pamixer \
+    brightnessctl sweet-gtk-theme sweet-folders-icons-git xdg-user-dirs \
+    fastfetch ladspa ttf-firacode-nerd noto-fonts noto-fonts-emoji \
+    ttf-nerd-fonts-symbols-common otf-firamono-nerd qt5-wayland qt6-wayland \
+    motivewave mkinitcpio-firmware ib-tws nwg-look bolt-launcher 
        
        echo "[$(date '+%Y-%m-%d %H:%M:%S')] Package installation completed"
    } 2>&1 | tee -a "$INSTLOG"
