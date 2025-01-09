@@ -1,7 +1,7 @@
 # Personal Arch Hyprland Configuration
 ## Things to remember
 - bash completion
-- zsh and plugins - foot + zsk + power10k + antidote
+- zsh and plugins - foot + fish + tidy
 - all noto fonts
 - groups wheel
 - ntp
