@@ -100,7 +100,7 @@ fi
 # Fix the Flickering
 if prompt_user "Would you like to fix the Artifacts?"; then
     print_message "$GREEN" "Setting up panel refresh..."
-    sudo find /boot/loader/entries/ -name '*linux-zen.conf' -exec sed -i '/^options/ s/$/ amdgpu.dcdebugmask=0x10' {} +
+    sudo find /boot/loader/entries/ -name '*linux-zen.conf' -exec sed -i '/^options/ s/$/ amdgpu.dcdebugmask=0x10/' {} +
 fi
 
 # Implement udev rule for mic mute LED
