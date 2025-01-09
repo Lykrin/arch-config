@@ -56,7 +56,7 @@ fi
     # Install PipeWire and its components first
     yay -S --noconfirm --needed \
            pipewire{,-pulse,-alsa,-jack,-audio} lib32-pipewire{,-jack} \
-           wireplumber noise-suppression-for-voice
+           wireplumber noise-suppression-for-voice 
     # Install Hyprland dependencies first
     yay -S --noconfirm --needed \
         cmake ninja meson wayland-protocols \
@@ -65,14 +65,13 @@ fi
         xorg-xinput libxrender pixman \
         wayland-protocols libdrm libxkbcommon \
         xcb-util-wm xorg-xwayland glslang \
-        qt6-wayland hyprlang pugixml
+        qt6-wayland hyprlang pugixml hyprutils-git
         
     # Install Hyprland components in correct order
     yay -S --noconfirm --needed \
         glaze \
         hyprwayland-scanner-git \
         hyprland-protocols-git \
-        hyprutils-git \
         hyprlang-git \
         hyprcursor-git \
         hyprgraphics-git \
