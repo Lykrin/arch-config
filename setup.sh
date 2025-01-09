@@ -54,19 +54,19 @@ fi
        echo "[$(date '+%Y-%m-%d %H:%M:%S')] Starting package installation"
        
 # Base dependencies first
-yay -S --noconfirm --needed cmake ninja meson wayland-protocols \
+yay -S --noconfirm --quiet --needed cmake ninja meson wayland-protocols \
     libxcb xcb-proto xcb-util xcb-util-keysyms libxfixes libx11 \
     libxcomposite xorg-xinput libxrender pixman wayland-protocols \
     libdrm libxkbcommon xcb-util-wm xorg-xwayland glslang \
     qt6-wayland pugixml
 
 # Audio stack
-yay -S --noconfirm --needed pipewire pipewire-pulse pipewire-alsa \
+yay -S --noconfirm --quiet --needed pipewire pipewire-pulse pipewire-alsa \
     pipewire-jack pipewire-audio lib32-pipewire lib32-pipewire-jack \
     wireplumber noise-suppression-for-voice
 
 # Install git versions with force flag
-yay -S --noconfirm --needed --overwrite "*" \
+yay -S --noconfirm --quiet --needed --overwrite "*" \
     hyprutils-git \
     hyprlang-git \
     hyprwayland-scanner-git \
@@ -79,7 +79,7 @@ yay -S --noconfirm --needed --overwrite "*" \
     hyprland-git
 
 # Install additional utilities after core components
-yay -S --noconfirm --needed --overwrite "*" \
+yay -S --noconfirm --quiet --needed --overwrite "*" \
     hypridle-git \
     hyprlock-git \
     hyprpaper-git \
@@ -87,7 +87,7 @@ yay -S --noconfirm --needed --overwrite "*" \
     xdg-desktop-portal-hyprland-git
 
 # Rest of the packages
-yay -S --noconfirm --needed fish waybar networkmanager-dmenu \
+yay -S --noconfirm --quiet --needed fish waybar networkmanager-dmenu \
     network-manager-applet ffmpeg ffmpegthumbnailer wf-recorder \
     grimblast-git uwsm neovim foot foot-terminfo nemo nemo-fileroller \
     gvfs gvfs-mtp fuzzel pavucontrol cliphist wl-clipboard clapper \
@@ -98,7 +98,7 @@ yay -S --noconfirm --needed fish waybar networkmanager-dmenu \
     motivewave mkinitcpio-firmware ib-tws nwg-look bolt-launcher 
        
        echo "[$(date '+%Y-%m-%d %H:%M:%S')] Package installation completed"
-   } 2>&1 | tee -a "$INSTLOG"
+   } 2>&1 | grep -E "error|warning|critical|failed" | tee -a "$INSTLOG"
    fi
 
 # Copy .config files
