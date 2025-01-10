@@ -95,7 +95,8 @@ yay -S --noconfirm --needed fish waybar networkmanager-dmenu \
     brightnessctl sweet-gtk-theme sweet-folders-icons-git xdg-user-dirs \
     fastfetch ladspa ttf-firacode-nerd noto-fonts noto-fonts-emoji steam \
     ttf-nerd-fonts-symbols-common otf-firamono-nerd qt5-wayland qt6-wayland \
-    motivewave mkinitcpio-firmware ib-tws nwg-look bolt-launcher bibata-cursor-theme-bin
+    motivewave mkinitcpio-firmware ib-tws nwg-look bolt-launcher bibata-cursor-theme-bin \
+    gnome-themes-extra adwaita-qt5 adwaita-qt6 qt5ct qt6ct
        
        echo "[$(date '+%Y-%m-%d %H:%M:%S')] Package installation completed"
    } 2>&1 tee -a "$INSTLOG"
