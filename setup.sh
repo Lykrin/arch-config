@@ -88,7 +88,7 @@ if prompt_user "Would you like to install the packages?"; then
     # Additional utilities with overwrite option
     additional_utils=(hypridle-git hyprlock-git hyprpaper-git hyprpolkitagent-git
                       xdg-desktop-portal-hyprland-git)
-    install_packages "--overwrite \"*\"" "${additional_utils[@]}"
+    install_packages "--overwrite='*'"" "${additional_utils[@]}"
     
     # Rest of the packages
     other_packages=(fish waybar networkmanager-dmenu network-manager-applet ffmpeg ffmpegthumbnailer
@@ -111,9 +111,9 @@ if prompt_user "Would you like to copy .config files?"; then
     cp -R wallpapers ~/
     cp -R .icons ~/
     sudo cp -f loader.conf /boot/loader/
-    sudo cp -f mkinitcpio.conf /etc/
+#    sudo cp -f mkinitcpio.conf /etc/
     sudo cp -f vconsole.conf /etc/
-    sudo cp -f motivewave /bin/
+#    sudo cp -f motivewave /bin/
     chmod +x ~/.config/waybar/scripts/* ~/.config/hypr/xdg-portal-hyprland
 fi
 
