@@ -83,7 +83,7 @@ if prompt_user "Would you like to install the packages?"; then
     git_packages=(hyprutils-git hyprlang-git hyprwayland-scanner-git hyprland-protocols-git
                   hyprgraphics-git hyprland-qt-support-git hyprland-qtutils-git hyprcursor-git
                   aquamarine-git hyprland-git)
-    install_packages "--overwrite \"*\"" "${git_packages[@]}"
+    install_packages "--overwrite='*'"" "${git_packages[@]}"
     
     # Additional utilities with overwrite option
     additional_utils=(hypridle-git hyprlock-git hyprpaper-git hyprpolkitagent-git
