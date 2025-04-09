@@ -97,8 +97,8 @@ if prompt_user "Would you like to install the packages?"; then
                     btop vivaldi vesktop fprintd cava dunst pamixer brightnessctl sweet-gtk-theme
                     sweet-folders-icons-git xdg-user-dirs fastfetch ladspa ttf-firacode-nerd noto-fonts
                     noto-fonts-emoji steam ttf-nerd-fonts-symbols-common otf-firamono-nerd qt5-wayland
-                    qt6-wayland motivewave mkinitcpio-firmware ib-tws nwg-look bolt-launcher bibata-cursor-theme-bin
-                    gnome-themes-extra adwaita-qt5 adwaita-qt6 qt5ct qt6ct)
+                    qt6-wayland mkinitcpio-firmware ib-tws nwg-look bolt-launcher bibata-cursor-theme-bin
+                    gnome-themes-extra adwaita-qt5 adwaita-qt6 qt5ct qt6ct ripgrep )
     install_packages "" "${other_packages[@]}"
     
     echo "[$(date '+%Y-%m-%d %H:%M:%S')] Package installation completed" | tee -a "$INSTLOG"
@@ -125,11 +125,11 @@ if prompt_user "Would you like to set up silent boot?"; then
 fi
 
 # Fix display artifacts if requested
-if prompt_user "Would you like to fix the Artifacts?"; then
-    print_message "$GREEN" "Setting up panel refresh..."
-    sudo find /boot/loader/entries/ -name '*linux-zen.conf' \
-      -exec sed -i '/^options/ s/$/ amdgpu.dcdebugmask=0x10/' {} +
-fi
+#if prompt_user "Would you like to fix the Artifacts?"; then
+#    print_message "$GREEN" "Setting up panel refresh..."
+#    sudo find /boot/loader/entries/ -name '*linux-zen.conf' \
+#      -exec sed -i '/^options/ s/$/ amdgpu.dcdebugmask=0x10/' {} +
+#fi
 
 # Kickstart installation (optional)
 if prompt_user "Would you like to install #Kickstart?"; then
