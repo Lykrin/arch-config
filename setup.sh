@@ -95,7 +95,7 @@ if prompt_user "Would you like to install the packages?"; then
                     wf-recorder grimblast-git uwsm neovim foot foot-terminfo nemo nemo-fileroller
                     gvfs gvfs-mtp fuzzel pavucontrol cliphist wl-clipboard clapper wttrbar viewnior
                     btop vivaldi vesktop fprintd cava dunst pamixer brightnessctl sweet-gtk-theme
-                    sweet-folders-icons-git xdg-user-dirs fastfetch ladspa ttf-firacode-nerd noto-fonts
+                    sweet-folders-icons-git xdg-user-dirs fastfetch ladspa noto-fonts-cjk ttf-firacode-nerd noto-fonts
                     noto-fonts-emoji steam ttf-nerd-fonts-symbols-common otf-firamono-nerd qt5-wayland
                     qt6-wayland mkinitcpio-firmware ib-tws nwg-look bolt-launcher bibata-cursor-theme-bin
                     gnome-themes-extra adwaita-qt5 adwaita-qt6 qt5ct qt6ct ripgrep )
