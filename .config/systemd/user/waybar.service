@@ -1,0 +1,14 @@
+[Unit]
+Description=Waybar
+PartOf=graphical-session.target
+After=hyprland.service
+
+[Service]
+Type=simple
+WantedBy=graphical-session.target
+ExecStartPre=/bin/sleep 2
+ExecStart=/usr/bin/waybar
+Restart=on-failure
+
+[Install]
+WantedBy=graphical-session.target

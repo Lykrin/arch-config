@@ -1,0 +1,14 @@
+[Unit]
+Description=Hyprland Wallpaper Setter (hyprpaper)
+PartOf=graphical-session.target
+After=hyprland.service
+
+[Service]
+Type=simple
+ExecStartPre=/bin/sleep 2
+ExecStart=/usr/bin/hyprpaper
+Restart=on-failure
+
+[Install]
+WantedBy=graphical-session.target
+
