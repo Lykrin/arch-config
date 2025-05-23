@@ -1,34 +1,88 @@
 #!/bin/sh
 
+# Directory for icons
 iDIR="$HOME/.config/waybar/icons"
 
-get_backlight() {
+# Gets current brightness as a percentage string (e.g., "80")
+# This is the value the user sees and expects to change by 10 points.
+get_current_brightness_percentage() {
     brightnessctl -m | grep -o '[0-9]\+%' | head -c-2
 }
 
+# Gets current brightness as an absolute value string (e.g., "204")
+# Used by get_icon for its fixed thresholds
+get_current_brightness_absolute() {
+    brightnessctl g
+}
+
+# Determines icon based on absolute brightness value
 get_icon() {
-    current=$(brightnessctl g)
-    if   [ "$current" -lt 51  ]; then echo "$iDIR/brightness-20.png"
-    elif [ "$current" -lt 102 ]; then echo "$iDIR/brightness-40.png"
-    elif [ "$current" -lt 153 ]; then echo "$iDIR/brightness-60.png"
-    elif [ "$current" -lt 204 ]; then echo "$iDIR/brightness-80.png"
-    elif [ "$current" -lt 255 ]; then echo "$iDIR/brightness-90.png"
-    else echo "$iDIR/brightness-100.png"
+    current_abs=$(get_current_brightness_absolute)
+    # Original fixed thresholds. These are based on absolute values.
+    # For example, if max brightness is 255:
+    # 51/255  ~ 20%
+    # 102/255 ~ 40%
+    # 153/255 ~ 60%
+    # 204/255 ~ 80%
+    # The script will still use these absolute thresholds for icons.
+    if   [ "$current_abs" -lt 51  ]; then echo "$iDIR/brightness-20.png"
+    elif [ "$current_abs" -lt 102 ]; then echo "$iDIR/brightness-40.png"
+    elif [ "$current_abs" -lt 153 ]; then echo "$iDIR/brightness-60.png"
+    elif [ "$current_abs" -lt 204 ]; then echo "$iDIR/brightness-80.png"
+    elif [ "$current_abs" -lt 255 ]; then echo "$iDIR/brightness-90.png" # Catches 204-254
+    else echo "$iDIR/brightness-100.png" # Catches 255 and possibly higher if max > 255
     fi
 }
 
+# Sends a notification with the current brightness level and icon
 notify_user() {
     notify-send -h string:x-canonical-private-synchronous:sys-notify -u low \
-                -i "$(get_icon)" "Brightness : $(get_backlight)%"
+                -i "$(get_icon)" "Brightness : $(get_current_brightness_percentage)%"
 }
 
-change_backlight() {
-    brightnessctl set "$1" && notify_user
-}
-
+# Main logic to handle arguments
 case "$1" in
-    --get) brightnessctl g ;;
-    --inc) change_backlight "+10%" ;;
-    --dec) change_backlight "10%-" ;;
-    *)     get_backlight ;;
+    --get)
+        # Output current brightness percentage
+        get_current_brightness_percentage
+        ;;
+    --inc)
+        current_percent_str=$(get_current_brightness_percentage)
+        # Exit if brightness percentage could not be determined
+        if [ -z "$current_percent_str" ]; then
+            echo "Error: Could not get current brightness percentage." >&2
+            exit 1
+        fi
+        
+        new_percent=$((current_percent_str + 10))
+        
+        # Clamp new_percent to a maximum of 100
+        if [ "$new_percent" -gt 100 ]; then
+            new_percent=100
+        fi
+        
+        brightnessctl set "${new_percent}%" && notify_user
+        ;;
+    --dec)
+        current_percent_str=$(get_current_brightness_percentage)
+        # Exit if brightness percentage could not be determined
+        if [ -z "$current_percent_str" ]; then
+            echo "Error: Could not get current brightness percentage." >&2
+            exit 1
+        fi
+
+        new_percent=$((current_percent_str - 10))
+        
+        # Clamp new_percent to a minimum of 0
+        # You could change 0 to a different minimum like 1 or 5 if desired.
+        if [ "$new_percent" -lt 0 ]; then
+            new_percent=0
+        fi
+        
+        brightnessctl set "${new_percent}%" && notify_user
+        ;;
+    *)  
+        # Default action: print current brightness percentage
+        get_current_brightness_percentage
+        ;;
 esac

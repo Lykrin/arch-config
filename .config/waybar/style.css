@@ -1,4 +1,15 @@
+/* -------------------------------------------------------------------------
+ * Waybar Style Configuration
+ * -------------------------------------------------------------------------
+ * Note: This is a specialized CSS configuration for Waybar
+ * -------------------------------------------------------------------------
+ */
+
 @import "themes/themes.css";
+
+/* -------------------------------------------------------------------------
+ * Global Styles
+ * ------------------------------------------------------------------------- */
 * {
     border: none;
     border-radius: 0;
@@ -8,16 +19,29 @@
     min-height: 12px;
 }
 
+/* Base window */
 window#waybar {
     background: rgba(0, 0, 0, 0);
     color: @text;
 }
 
+/* Tooltip styling */
 tooltip {
- background: @base;
+    background: @base;
     color: @text;
     border-radius: 7px;
     border-width: 0px;
+}
+
+/* -------------------------------------------------------------------------
+ * Workspaces Module
+ * ------------------------------------------------------------------------- */
+#workspaces {
+    background: @base;
+    border-radius: 10px;
+    margin-left: 5px;
+    padding-right: 0px;
+    padding-left: 5px;
 }
 
 #workspaces button {
@@ -52,6 +76,9 @@ tooltip {
     border-radius: 10px;
 }
 
+/* -------------------------------------------------------------------------
+ * Common Module Styling
+ * ------------------------------------------------------------------------- */
 #custom-weather,
 #custom-update,
 #mpris,
@@ -62,45 +89,39 @@ tooltip {
 #temperature,
 #battery,
 #pulseaudio,
-#network,
-#workspaces,
 #tray,
 #backlight {
     background: @base;
-    padding: 0px 5px;
-    margin: 3px 0px;
+    padding: 0px 2px;
+    margin: 1px 0px;
     margin-top: 5px;
     border: 1px solid @mantle;
 }
 
+/* -------------------------------------------------------------------------
+ * Left Side Modules
+ * ------------------------------------------------------------------------- */
 #clock {
     background: @base;
-    padding: 0px 5px;
+    padding: 0px 0px;
     margin: 3px 0px;
     margin-top: 5px;
-    margin-left: 5px;
+    margin-left: 0px;
     border: 1px solid @mantle;
     border-radius: 10px 0px 0px 10px;
     color: @lavender;
 }
 
-#workspaces {
-    background: @base;
-    border-radius: 10px;
-    margin-left: 5px;
-    padding-right: 0px;
-    padding-left: 5px;
+#idle_inhibitor {
+  margin-right: 5px;
 }
 
-#window{
-    border-radius: 10px;
-    margin-left: 5px;
-    margin-right: 5px;
+#idle_inhibitor.activated {
+  color: @green;
 }
 
-#idle_inhibitor{
-    color: @orange;
-    margin-right: 5px;
+#idle_inhibitor.deactivated {
+  color: @red;
 }
 
 #cpu {
@@ -125,14 +146,26 @@ tooltip {
     color: @red;
 }
 
+/* -------------------------------------------------------------------------
+ * Center Modules
+ * ------------------------------------------------------------------------- */
+#window {
+    border-radius: 10px;
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+/* -------------------------------------------------------------------------
+ * Right Side Modules
+ * ------------------------------------------------------------------------- */
 #custom-weather {
     border-radius: 10px;
     margin-left: 5px;
 }
 
-#custom-update{
+#custom-update {
     border-radius: 10px;
-    margin-left: 5px ;
+    margin-left: 5px;
     color: @sky;
 }
 
@@ -146,6 +179,8 @@ tooltip {
 #network {
     color: @teal;
     border-radius: 10px 0px 0px 10px;
+    margin-right: 4px;
+    min-width: 20px;
 }
 
 #pulseaudio {
@@ -164,27 +199,9 @@ tooltip {
     color: @red;
 }
 
-#custom-power {
-    color: @red;
-    background: @base;
-    padding: 0px 5px;
-    margin: 3px 0px;
-    margin-top: 5px;
-    margin-right: 5px;
-    border-radius: 0px 10px 10px 0px;
-    border: 1px solid @mantle;
-	
-}
-
-#custom-notification{
-    background: @base;
-    padding: 0px 5px;
-    margin: 3px 0px;
-    margin-top: 5px;
-    border: 1px solid @mantle;
-  color: @yellow;
-}
-
+/* -------------------------------------------------------------------------
+ * Taskbar Styling
+ * ------------------------------------------------------------------------- */
 #taskbar button {
     box-shadow: none;
     text-shadow: none;
@@ -218,3 +235,44 @@ tooltip {
     transition: all 0.3s cubic-bezier(.55,-0.68,.48,1.682);
 }
 
+/* -------------------------------------------------------------------------
+ * Custom Modules
+ * ------------------------------------------------------------------------- */
+/* VPN Module */
+#custom-wireguard {
+    padding: 0 10px;
+}
+
+#custom-wireguard.connected {
+    color: #A3BE8C; /* Greenish color */
+}
+
+#custom-wireguard.disconnected {
+    color: #BF616A; /* Reddish color */
+}
+
+#custom-wireguard.error {
+    color: #EBCB8B; /* Yellowish color */
+}
+
+/* Power Button */
+#custom-power {
+    color: @red;
+    background: @base;
+    padding: 0px 5px;
+    margin: 1px 0px;
+    margin-top: 5px;
+    margin-right: 5px;
+    border-radius: 0px 10px 10px 0px;
+    border: 1px solid @mantle;
+}
+
+/* Notification Module */
+#custom-notification {
+    background: @base;
+    padding: 0px 5px;
+    margin: 3px 0px;
+    margin-top: 5px;
+    border: 1px solid @mantle;
+    color: @yellow;
+}
