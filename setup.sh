@@ -39,6 +39,14 @@ install_packages() {
     yay -S --noconfirm --needed "${options[@]}" 2>&1 | tee -a "$INSTLOG"
 }
 
+# Function to extend sudo timeout to avoid repeated password prompts
+extend_sudo_timeout() {
+    print_message "$YELLOW" "Extending sudo session timeout for this script..."
+    sudo -v
+    # Keep sudo alive in background
+    while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
+}
+
 # Ensure required dependencies are available
 if pacman -Qq base-devel &>/dev/null; then
     print_message "$GREEN" "Base Devel located, moving on."
@@ -46,6 +54,9 @@ else
     print_message "$RED" "Base Devel is required for this script. Exiting..."
     exit 1
 fi
+
+# Extend sudo timeout early to avoid repeated prompts
+extend_sudo_timeout
 
 # Check for yay using command -v; install if missing
 if command -v yay &>/dev/null; then
@@ -90,57 +101,129 @@ if prompt_user "Would you like to install the packages?"; then
                       xdg-desktop-portal-hyprland-git)
     install_packages "--overwrite='*'" "${additional_utils[@]}"
     
-    # Rest of the packages
-    other_packages=(fish waybar networkmanager-dmenu network-manager-applet ffmpeg ffmpegthumbnailer
+    # Rest of the packages - removed NetworkManager and added iwd for iwctl
+    other_packages=(fish waybar iwd ffmpeg ffmpegthumbnailer
                     wf-recorder grimblast-git uwsm neovim foot foot-terminfo nemo nemo-fileroller
                     gvfs gvfs-mtp fuzzel pavucontrol cliphist wl-clipboard clapper wttrbar viewnior
                     btop vivaldi vesktop fprintd cava dunst pamixer brightnessctl sweet-gtk-theme
                     sweet-folders-icons-git xdg-user-dirs fastfetch ladspa noto-fonts-cjk ttf-firacode-nerd noto-fonts
                     noto-fonts-emoji steam ttf-nerd-fonts-symbols-common otf-firamono-nerd qt5-wayland
                     qt6-wayland mkinitcpio-firmware ib-tws nwg-look bolt-launcher bibata-cursor-theme-bin
-                    gnome-themes-extra adwaita-qt5 adwaita-qt6 qt5ct qt6ct ripgrep )
+                    gnome-themes-extra adwaita-qt5 adwaita-qt6 qt5ct qt6ct ripgrep)
     install_packages "" "${other_packages[@]}"
     
     echo "[$(date '+%Y-%m-%d %H:%M:%S')] Package installation completed" | tee -a "$INSTLOG"
 fi
 
-# Copy .config files if requested
-if prompt_user "Would you like to copy .config files?"; then
-    print_message "$GREEN" "Copying .config files..."
-    cp -R .config/* ~/.config/
-    cp -R wallpapers ~/
-    cp -R .icons ~/
-    sudo cp -f loader.conf /boot/loader/
-#    sudo cp -f mkinitcpio.conf /etc/
-    sudo cp -f vconsole.conf /etc/
-#    sudo cp -f motivewave /bin/
-    chmod +x ~/.config/waybar/scripts/* ~/.config/hypr/xdg-portal-hyprland
+# Set Fish as default shell
+if prompt_user "Would you like to set Fish as your default shell?"; then
+    print_message "$GREEN" "Setting Fish as default shell..."
+    
+    # Check if fish is in /etc/shells
+    if ! grep -q "/usr/bin/fish" /etc/shells; then
+        echo "/usr/bin/fish" | sudo tee -a /etc/shells
+    fi
+    
+    # Change default shell to fish
+    sudo chsh -s /usr/bin/fish "$USER"
+    print_message "$GREEN" "Fish shell set as default. Changes will take effect after logout/login."
 fi
 
-# Setup silent boot if requested
-if prompt_user "Would you like to set up silent boot?"; then
-    print_message "$GREEN" "Setting up silent boot..."
+# Copy configuration files if requested
+if prompt_user "Would you like to copy configuration files?"; then
+    print_message "$GREEN" "Copying configuration files..."
+    
+    # Create necessary directories
+    mkdir -p ~/.config ~/.icons
+    
+    # Copy .config directory contents (includes UWSM configuration)
+    if [ -d ".config" ]; then
+        cp -R .config/* ~/.config/
+        print_message "$GREEN" "Copied .config files (including UWSM configuration)"
+    fi
+    
+    # Copy wallpapers directory
+    if [ -d "wallpapers" ]; then
+        cp -R wallpapers ~/
+        print_message "$GREEN" "Copied wallpapers"
+    fi
+    
+    # Copy icons directory
+    if [ -d ".icons" ]; then
+        cp -R .icons/* ~/.icons/
+        print_message "$GREEN" "Copied .icons files"
+    fi
+    
+    # Copy system configuration files
+    if [ -f "loader.conf" ]; then
+        sudo cp -f loader.conf /boot/loader/
+        print_message "$GREEN" "Copied loader.conf"
+    fi
+    
+    if [ -f "vconsole.conf" ]; then
+        sudo cp -f vconsole.conf /etc/
+        print_message "$GREEN" "Copied vconsole.conf"
+    fi
+    
+    if [ -f "mkinitcpio.conf" ]; then
+        sudo cp -f mkinitcpio.conf /etc/
+        print_message "$GREEN" "Copied mkinitcpio.conf"
+    fi
+    
+    if [ -f "motivewave" ]; then
+        sudo cp -f motivewave /bin/
+        sudo chmod +x /bin/motivewave
+        print_message "$GREEN" "Copied motivewave binary"
+    fi
+    
+    # Set executable permissions for scripts
+    if [ -d ~/.config/waybar/scripts ]; then
+        chmod +x ~/.config/waybar/scripts/*
+    fi
+    
+    if [ -f ~/.config/hypr/xdg-portal-hyprland ]; then
+        chmod +x ~/.config/hypr/xdg-portal-hyprland
+    fi
+    
+    print_message "$GREEN" "Configuration files copied successfully"
+fi
+
+# Setup silent boot for zen kernel
+if prompt_user "Would you like to set up silent boot for zen kernel?"; then
+    print_message "$GREEN" "Setting up silent boot for zen kernel..."
     sudo find /boot/loader/entries/ -name '*linux-zen.conf' \
       -exec sed -i '/^options/ s/$/ quiet loglevel=2 systemd.show_status=auto rd.udev.log_level=2/' {} +
+    print_message "$GREEN" "Silent boot configured for zen kernel"
 fi
-
-# Fix display artifacts if requested
-#if prompt_user "Would you like to fix the Artifacts?"; then
-#    print_message "$GREEN" "Setting up panel refresh..."
-#    sudo find /boot/loader/entries/ -name '*linux-zen.conf' \
-#      -exec sed -i '/^options/ s/$/ amdgpu.dcdebugmask=0x10/' {} +
-#fi
 
 # Kickstart installation (optional)
-if prompt_user "Would you like to install #Kickstart?"; then
-    print_message "$GREEN" "Installing #Kickstart..."
-    git clone https://github.com/lykrin/kickstart.nvim.git "${XDG_CONFIG_HOME:-$HOME/.config}"/nvim
+if prompt_user "Would you like to install Kickstart Neovim config?"; then
+    print_message "$GREEN" "Installing Kickstart Neovim config..."
+    # Backup existing nvim config if it exists and it's not from the repo
+    if [ -d ~/.config/nvim ] && [ ! -f ~/.config/nvim/.repo_config ]; then
+        mv ~/.config/nvim ~/.config/nvim.backup.$(date +%Y%m%d_%H%M%S)
+    fi
+    git clone https://github.com/lykrin/kickstart.nvim.git ~/.config/nvim
 fi
 
-print_message "$GREEN" "Script has completed. Remember to set NM and quiet boot."
-print_message "$GREEN" "You can start Hyprland by typing Hyprland (note the capital H)."
+# Enable essential services (iwd instead of NetworkManager)
+if prompt_user "Would you like to enable essential services (iwd, bluetooth, fstrim)?"; then
+    print_message "$GREEN" "Enabling essential services..."
+    sudo systemctl enable iwd
+    sudo systemctl enable bluetooth
+    sudo systemctl enable fstrim.timer
+    print_message "$GREEN" "Essential services enabled (iwd, bluetooth, fstrim)"
+fi
+
+print_message "$GREEN" "Script has completed successfully!"
+print_message "$YELLOW" "Important notes:"
+print_message "$YELLOW" "- Fish shell is now your default shell (effective after logout/login)"
+print_message "$YELLOW" "- UWSM configuration is already included in your .config files"
+print_message "$YELLOW" "- Hyprland will auto-start on TTY1 login with your existing UWSM setup"
+print_message "$YELLOW" "- iwd service is enabled for wireless networking (use iwctl command)"
+print_message "$YELLOW" "- Silent boot is configured for zen kernel"
 
 # Prompt for reboot
-if prompt_user "Would you like to reboot?"; then
-    reboot
+if prompt_user "Would you like to reboot now to apply all changes?"; then
+    sudo reboot
 fi
