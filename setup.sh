@@ -170,10 +170,9 @@ if prompt_user "Would you like to copy configuration files?"; then
         print_message "$GREEN" "Copied mkinitcpio.conf"
     fi
     
-    if [ -f "motivewave" ]; then
-        sudo cp -f motivewave /bin/
-        sudo chmod +x /bin/motivewave
-        print_message "$GREEN" "Copied motivewave binary"
+    if [ -f "locale.gen" ]; then
+        sudo cp -f locale.gen /etc/
+        print_message "$GREEN" "Copied Locale file"
     fi
     
     # Set executable permissions for scripts
@@ -215,6 +214,12 @@ if prompt_user "Would you like to enable essential services (iwd, bluetooth, fst
     print_message "$GREEN" "Essential services enabled (iwd, bluetooth, fstrim)"
 fi
 
+if prompt_user "Would you like to regenerate locale?"; then
+    print_message "$GREEN" "Setting up locale..."
+    sudo locale-gen
+    print_message "$GREEN" "Locale Generated"
+fi
+
 print_message "$GREEN" "Script has completed successfully!"
 print_message "$YELLOW" "Important notes:"
 print_message "$YELLOW" "- Fish shell is now your default shell (effective after logout/login)"
@@ -222,6 +227,7 @@ print_message "$YELLOW" "- UWSM configuration is already included in your .confi
 print_message "$YELLOW" "- Hyprland will auto-start on TTY1 login with your existing UWSM setup"
 print_message "$YELLOW" "- iwd service is enabled for wireless networking (use iwctl command)"
 print_message "$YELLOW" "- Silent boot is configured for zen kernel"
+print_message "$YELLOW" "- Locale regenerated and set up"
 
 # Prompt for reboot
 if prompt_user "Would you like to reboot now to apply all changes?"; then
