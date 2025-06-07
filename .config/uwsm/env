@@ -1,0 +1,17 @@
+# ~/.config/uwsm/env
+export UWSM_USE_SESSION_SLICE=true
+export WAYLAND_DISPLAY=wayland-1
+export XCURSOR_THEME=Bibata-Modern-Ice
+export XCURSOR_SIZE=24
+export MOZ_ENABLE_WAYLAND=1
+export GDK_BACKEND=wayland
+export QT_QPA_PLATFORM=wayland
+export SDL_VIDEODRIVER=wayland
+export CLUTTER_BACKEND=wayland
+export QT_AUTO_SCREEN_SCALE_FACTOR=1
+export QT_WAYLAND_DISABLE_WINDOWDECORATION=1
+export QT_QPA_PLATFORMTHEME=qt6ct
+export GTK_THEME=Sweet-Dark
+export QT5_STYLE_OVERRIDE=adwaita-dark
+export QT6_STYLE_OVERRIDE=adwaita-dark
+export LIBVA_DRIVER_NAME=radeonsi
