@@ -1,14 +1,17 @@
 [Unit]
-Description=Waybar
-PartOf=graphical-session.target
-After=hyprland.service
+Description=Highly customizable Wayland bar
+Documentation=https://github.com/Alexays/Waybar/wiki
+PartOf=hyprland-session.target
+After=hyprland-session.target
+Wants=hyprland-session.target
 
 [Service]
 Type=simple
-WantedBy=graphical-session.target
 ExecStartPre=/bin/sleep 2
 ExecStart=/usr/bin/waybar
 Restart=on-failure
+RestartSec=3
+Environment=WAYLAND_DISPLAY=wayland-1
 
 [Install]
-WantedBy=graphical-session.target
+WantedBy=hyprland-session.target
