@@ -1,0 +1,17 @@
+[Unit]
+Description=Dunst notification daemon
+Documentation=man:dunst(1)
+PartOf=hyprland-session.target
+After=hyprland-session.target
+Wants=hyprland-session.target
+
+[Service]
+Type=simple
+ExecStartPre=/bin/sleep 2.5
+ExecStart=/usr/bin/dunst
+Restart=on-failure
+RestartSec=3
+Environment=WAYLAND_DISPLAY=wayland-1
+
+[Install]
+WantedBy=hyprland-session.target
