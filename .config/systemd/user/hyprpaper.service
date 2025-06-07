@@ -1,14 +1,17 @@
 [Unit]
-Description=Hyprland Wallpaper Setter (hyprpaper)
-PartOf=graphical-session.target
-After=hyprland.service
+Description=Hyprland wallpaper daemon
+Documentation=https://github.com/hyprwm/hyprpaper
+PartOf=hyprland-session.target
+After=hyprland-session.target
+Wants=hyprland-session.target
 
 [Service]
 Type=simple
-ExecStartPre=/bin/sleep 2
+ExecStartPre=/bin/sleep 1.5
 ExecStart=/usr/bin/hyprpaper
 Restart=on-failure
+RestartSec=3
+Environment=WAYLAND_DISPLAY=wayland-1
 
 [Install]
-WantedBy=graphical-session.target
-
+WantedBy=hyprland-session.target
