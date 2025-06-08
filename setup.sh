@@ -205,27 +205,25 @@ if prompt_user "Would you like to install Kickstart Neovim config?"; then
     git clone https://github.com/lykrin/kickstart.nvim.git ~/.config/nvim
 fi
 
-# Enable essential services (iwd instead of NetworkManager)
-if prompt_user "Would you like to enable essential services (iwd, bluetooth, fstrim)?"; then
-    print_message "$GREEN" "Enabling essential services..."
-    sudo systemctl enable iwd
-    sudo systemctl enable bluetooth
-    sudo systemctl enable fstrim.timer
-    print_message "$GREEN" "Essential services enabled (iwd, bluetooth, fstrim)"
-fi
-
 if prompt_user "Would you like to regenerate locale?"; then
     print_message "$GREEN" "Setting up locale..."
     sudo locale-gen
     print_message "$GREEN" "Locale Generated"
 fi
 
+# GTK themes
+gsettings set org.gnome.desktop.interface gtk-theme "Sweet-Dark"
+gsettings set org.gnome.desktop.wm.preferences theme "Sweet-Dark"
+gsettings set org.gnome.desktop.interface icon-theme "Sweet-folders"
+gsettings set org.gnome.desktop.interface cursor-theme "Bibata-Modern-Ice"
+gsettings set org.gnome.desktop.interface color-scheme "prefer-dark"
+
+
 print_message "$GREEN" "Script has completed successfully!"
 print_message "$YELLOW" "Important notes:"
 print_message "$YELLOW" "- Fish shell is now your default shell (effective after logout/login)"
 print_message "$YELLOW" "- UWSM configuration is already included in your .config files"
 print_message "$YELLOW" "- Hyprland will auto-start on TTY1 login with your existing UWSM setup"
-print_message "$YELLOW" "- iwd service is enabled for wireless networking (use iwctl command)"
 print_message "$YELLOW" "- Silent boot is configured for zen kernel"
 print_message "$YELLOW" "- Locale regenerated and set up"
 
