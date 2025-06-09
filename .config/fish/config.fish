@@ -10,10 +10,10 @@ end
 set -gx EDITOR nvim
 set -gx VISUAL nvim
 
-# Start Hyprland session via uwsm automatically when logging into TTY1
-if status is-login; and status is-interactive; and test (tty) = "/dev/tty1"
+# Start Hyprland with UWSM on TTY1 login
+if status is-login; and [ (tty) = /dev/tty1 ]
     if uwsm check may-start
-        exec systemd-cat -t uwsm_start uwsm start hyprland.desktop
+        exec uwsm start hyprland.desktop
     end
 end
 
