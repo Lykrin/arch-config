@@ -105,11 +105,11 @@ if prompt_user "Would you like to install the packages?"; then
     other_packages=(fish waybar iwd ffmpeg ffmpegthumbnailer
                     wf-recorder grimblast-git uwsm neovim foot foot-terminfo nemo nemo-fileroller
                     gvfs gvfs-mtp fuzzel pavucontrol cliphist wl-clipboard clapper wttrbar viewnior
-                    btop vivaldi vesktop fprintd cava dunst pamixer brightnessctl sweet-gtk-theme
+                    btop vivaldi vesktop fprintd cava dunst pamixer brightnessctl catppuccin-gtk-theme-mocha
                     sweet-folders-icons-git xdg-user-dirs fastfetch ladspa noto-fonts-cjk ttf-firacode-nerd noto-fonts
                     noto-fonts-emoji steam ttf-nerd-fonts-symbols-common otf-firamono-nerd qt5-wayland
                     qt6-wayland mkinitcpio-firmware ib-tws nwg-look bolt-launcher bibata-cursor-theme-bin
-                    gnome-themes-extra adwaita-qt5 adwaita-qt6 qt5ct qt6ct ripgrep)
+                    gnome-themes-extra qt5ct qt6ct ripgrep)
     install_packages "" "${other_packages[@]}"
     
     echo "[$(date '+%Y-%m-%d %H:%M:%S')] Package installation completed" | tee -a "$INSTLOG"
@@ -212,9 +212,9 @@ if prompt_user "Would you like to regenerate locale?"; then
 fi
 
 # GTK themes
-gsettings set org.gnome.desktop.interface gtk-theme "Sweet-Dark"
-gsettings set org.gnome.desktop.wm.preferences theme "Sweet-Dark"
-gsettings set org.gnome.desktop.interface icon-theme "Sweet-folders"
+gsettings set org.gnome.desktop.interface gtk-theme "Catppuccin-Mocha-Teal-Standard"
+gsettings set org.gnome.desktop.wm.preferences theme "Catppuccin-Mocha-Teal-Standard"
+gsettings set org.gnome.desktop.interface icon-theme "Breeze-Dark"
 gsettings set org.gnome.desktop.interface cursor-theme "Bibata-Modern-Ice"
 gsettings set org.gnome.desktop.interface color-scheme "prefer-dark"
 
