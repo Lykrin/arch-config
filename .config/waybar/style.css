@@ -276,3 +276,33 @@ tooltip {
     border: 1px solid @mantle;
     color: @yellow;
 }
+
+#custom-anti-afk {
+    background-color: #2d3142;
+    color: #bfc0c0;
+    padding: 0 10px;
+    margin: 0 5px;
+    border-radius: 5px;
+}
+
+#custom-anti-afk.active {
+    background-color: #000000;
+    color: #ffffff;
+}
+
+#custom-anti-afk.inactive {
+    background-color: #000000;
+    color: #ffffff;
+}
+
+#custom-anti-afk.pressing {
+    background-color: #000000;
+    color: #ffffff;
+}
+
+@keyframes pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.7; }
+    100% { opacity: 1; }
+}
+
