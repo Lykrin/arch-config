@@ -8,18 +8,18 @@ export QT_AUTO_SCREEN_SCALE_FACTOR=1
 export QT_WAYLAND_DISABLE_WINDOWDECORATION=1
 
 # GTK force dark style and theme
-GTK_THEME=Catppuccin-Mocha-Teal-Standard+Default
-GTK_APPLICATION_PREFER_DARK_THEME=1
-
+export GTK_THEME=catppuccin-mocha-teal-standard+default
+export GTK_APPLICATION_PREFER_DARK_THEME=1
+export ADW_DEBUG_COLOR_SCHEME=prefer-dark
 # Qt platform theme via qt6ct/qt5ct (will read Qt theme/colors set there)
-QT_QPA_PLATFORMTHEME=qt6ct
+export QT_QPA_PLATFORMTHEME=qt6ct
 export XCURSOR_THEME=Bibata-Modern-Classic
 export XCURSOR_SIZE=36
 # Fallback to qt5ct for Qt5 apps (qt6ct handles Qt6)
-QT_QPA_PLATFORMTHEME_FALLBACK=qt5ct
+#QT_QPA_PLATFORMTHEME_FALLBACK=qt5ct
 
 # Prefer Wayland where possible
-GTK_USE_PORTAL=1
+export GTK_USE_PORTAL=1
 
 # Kvantum (optional; if you choose Kvantum in qt6ct)
 #QT_STYLE_OVERRIDE=kvantum
