@@ -103,7 +103,7 @@ if prompt_user "Would you like to install the packages?"; then
     
     # Rest of the packages - removed NetworkManager and added iwd for iwctl
     other_packages=(fish waybar iwd ffmpeg ffmpegthumbnailer
-                    wf-recorder grimblast-git uwsm neovim foot foot-terminfo nemo nemo-fileroller
+                    wf-recorder ydotool grimblast-git uwsm neovim foot foot-terminfo nemo nemo-fileroller
                     gvfs gvfs-mtp fuzzel pavucontrol cliphist wl-clipboard clapper wttrbar viewnior
                     btop vivaldi vesktop fprintd cava dunst pamixer brightnessctl catppuccin-gtk-theme-mocha
                     sweet-folders-icons-git xdg-user-dirs fastfetch ladspa noto-fonts-cjk ttf-firacode-nerd noto-fonts
