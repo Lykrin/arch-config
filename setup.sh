@@ -109,7 +109,7 @@ if prompt_user "Would you like to install the packages?"; then
                     sweet-folders-icons-git xdg-user-dirs fastfetch ladspa noto-fonts-cjk ttf-firacode-nerd noto-fonts
                     noto-fonts-emoji steam ttf-nerd-fonts-symbols-common otf-firamono-nerd qt5-wayland
                     qt6-wayland mkinitcpio-firmware ib-tws nwg-look bolt-launcher bibata-cursor-theme-bin
-                    gnome-themes-extra qt5ct qt6ct ripgrep)
+                    gnome-themes-extra qt5ct qt6ct ripgrep xsettingsd xdg-desktop-portal xdg-desktop-portal-gtk)
     install_packages "" "${other_packages[@]}"
     
     echo "[$(date '+%Y-%m-%d %H:%M:%S')] Package installation completed" | tee -a "$INSTLOG"
