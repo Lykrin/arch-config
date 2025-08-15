@@ -104,12 +104,13 @@ if prompt_user "Would you like to install the packages?"; then
     # Rest of the packages - removed NetworkManager and added iwd for iwctl
     other_packages=(fish waybar iwd ffmpeg ffmpegthumbnailer
                     wf-recorder ydotool grimblast-git uwsm neovim foot foot-terminfo nemo nemo-fileroller
-                    gvfs gvfs-mtp fuzzel pavucontrol cliphist wl-clipboard clapper wttrbar mpv
+                    gvfs gvfs-mtp fuzzel pavucontrol cliphist wl-clipboard wttrbar mpv
                     btop vivaldi vesktop fprintd cava dunst pamixer brightnessctl catppuccin-gtk-theme-mocha
                     sweet-folders-icons-git xdg-user-dirs fastfetch ladspa noto-fonts-cjk ttf-firacode-nerd noto-fonts
                     noto-fonts-emoji steam ttf-nerd-fonts-symbols-common otf-firamono-nerd qt5-wayland
                     qt6-wayland mkinitcpio-firmware ib-tws nwg-look bolt-launcher bibata-cursor-theme-bin
-                    gnome-themes-extra qt5ct qt6ct ripgrep xsettingsd xdg-desktop-portal xdg-desktop-portal-gtk)
+                    gnome-themes-extra qt5ct qt6ct ripgrep xsettingsd xdg-desktop-portal xdg-desktop-portal-gtk
+                    qbittorrent-enhanced xsettingsd breeze-icons jre11-openjdk)
     install_packages "" "${other_packages[@]}"
     
     echo "[$(date '+%Y-%m-%d %H:%M:%S')] Package installation completed" | tee -a "$INSTLOG"
