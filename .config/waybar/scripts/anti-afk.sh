@@ -1,109 +1,89 @@
 #!/bin/bash
+# Anti-AFK script for Hyprland (Wayland) using ydotool
+# By default integrates with Waybar
 
-# Anti-AFK toggle switch script - ydotool only with startup test
-# Uses ydotool for maximum game compatibility
+set -euo pipefail
 
 SCRIPT_DIR="$HOME/.config/waybar/scripts"
 PID_FILE="$SCRIPT_DIR/.anti-afk.pid"
 STATUS_FILE="$SCRIPT_DIR/.anti-afk.status"
+export YDOTOOL_SOCKET="/run/user/$(id -u)/.ydotool_socket"
 
-# Ensure directories exist
 mkdir -p "$SCRIPT_DIR"
 
-# Set manual socket path for ydotool
-export YDOTOOL_SOCKET=/run/user/$(id -u)/.ydotool_socket
+# --- Helpers ---
 
-# Function to generate random delays between 2-4 seconds
 generate_random_delay() {
-    awk "BEGIN {srand(); printf \"%.3f\", 2 + rand() * 2}"
+    awk 'BEGIN {srand(); printf "%.3f", 2 + rand() * 2}'
 }
 
-# Function to send Enter key via ydotool
 send_enter() {
-    # Key code 28 is Enter, format is keycode:1 (press) keycode:0 (release)
-    YDOTOOL_SOCKET=$YDOTOOL_SOCKET ydotool key 28:1 28:0
+    ydotool key 28:1 28:0
 }
 
-# Function to perform single anti-AFK sequence
 perform_anti_afk_sequence() {
     echo "pressing" > "$STATUS_FILE"
-    
-    # Send 4 Enter presses with random delays between each
-    send_enter
-    sleep "$(generate_random_delay)"
-    
-    send_enter
-    sleep "$(generate_random_delay)"
-    
-    send_enter
-    sleep "$(generate_random_delay)"
-    
-    send_enter
-    
-    echo "active" > "$STATUS_FILE"
-}
-
-# Background daemon function
-anti_afk_daemon() {
-    echo "active" > "$STATUS_FILE"
-    
-    # Perform immediate startup test sequence
-    perform_anti_afk_sequence
-    
-    while [[ -f "$PID_FILE" ]]; do
-        # Wait for next cycle (18-20 minutes) with periodic checks
-        local wait_time=$(shuf -i 1080-1200 -n 1)  # 18-20 minutes in seconds
-        local elapsed=0
-        
-        while [[ $elapsed -lt $wait_time && -f "$PID_FILE" ]]; do
-            sleep 10  # Check every 10 seconds if we should stop
-            elapsed=$((elapsed + 10))
-        done
-        
-        # Check if we should still be running
-        if [[ -f "$PID_FILE" ]]; then
-            perform_anti_afk_sequence
-        fi
+    for _ in {1..4}; do
+        send_enter
+        sleep "$(generate_random_delay)"
     done
-    
-    echo "inactive" > "$STATUS_FILE"
+    echo "active" > "$STATUS_FILE"
 }
 
-# Function to start the anti-AFK daemon
-start_anti_afk() {
-    if [[ -f "$PID_FILE" ]] && kill -0 "$(cat "$PID_FILE")" 2>/dev/null; then
-        return 1  # Already running
-    fi
-    
-    # Clean up any stale files
-    rm -f "$PID_FILE" "$STATUS_FILE"
-    
-    # Perform immediate test sequence before starting daemon
-    echo "Testing key presses..."
+status_json() {
+    printf '{"text": "%s", "class": "%s", "tooltip": "%s"}\n' "$@"
+}
+
+# --- Daemon Loop ---
+
+anti_afk_daemon() {
+    # Ensure cleanup on exit of the daemon
+    trap 'echo "inactive" > "$STATUS_FILE"; rm -f "$PID_FILE"' EXIT
+
+    echo "active" > "$STATUS_FILE"
     perform_anti_afk_sequence
-    echo "Test completed. Starting daemon..."
-    
-    # Start daemon in background using nohup for better process management
-    nohup bash -c "
-        $(declare -f anti_afk_daemon)
-        $(declare -f perform_anti_afk_sequence) 
-        $(declare -f generate_random_delay)
-        $(declare -f send_enter)
-        SCRIPT_DIR='$SCRIPT_DIR'
-        PID_FILE='$PID_FILE'
-        STATUS_FILE='$STATUS_FILE'
-        export YDOTOOL_SOCKET=$YDOTOOL_SOCKET
-        anti_afk_daemon
-    " > /dev/null 2>&1 &
-    
+
+    while :; do
+        # Wait between 18 and 20 minutes, but remain responsive to stop requests
+        for ((elapsed=0, wait=$((RANDOM % 121 + 1080)); elapsed < wait; elapsed+=10)); do
+            sleep 10
+            [[ -f "$PID_FILE" ]] || exit 0
+        done
+        perform_anti_afk_sequence
+    done
+}
+
+# --- Controls ---
+
+is_running() {
+    # Return 0 if a live process matches the PID in PID_FILE; else cleanup and return 1
+    [[ -f "$PID_FILE" ]] || return 1
+    local pid
+    pid="$(cat "$PID_FILE" 2>/dev/null || true)"
+    if [[ -n "${pid:-}" ]] && kill -0 "$pid" 2>/dev/null; then
+        return 0
+    else
+        rm -f "$PID_FILE"
+        echo "inactive" > "$STATUS_FILE"
+        return 1
+    fi
+}
+
+start_anti_afk() {
+    if is_running; then
+        return 1
+    fi
+
+    # Start daemon in background and record its PID
+    anti_afk_daemon &
     local daemon_pid=$!
-    
-    # Save PID
     echo "$daemon_pid" > "$PID_FILE"
-    
-    # Wait a moment to ensure it started
-    sleep 1
-    
+
+    # Optional: disown the daemon so it persists independently
+    disown "$daemon_pid" 2>/dev/null || true
+
+    # Quick health check: ensure the daemon is actually alive
+    sleep 0.2
     if kill -0 "$daemon_pid" 2>/dev/null; then
         echo "active" > "$STATUS_FILE"
         return 0
@@ -114,103 +94,66 @@ start_anti_afk() {
     fi
 }
 
-# Function to stop the anti-AFK daemon
 stop_anti_afk() {
-    if [[ ! -f "$PID_FILE" ]]; then
-        return 1  # Not running
-    fi
-    
-    local pid=$(cat "$PID_FILE")
-    
-    # Kill the daemon process and its children
-    if kill "$pid" 2>/dev/null; then
-        # Wait for graceful shutdown
-        sleep 1
-        # Force kill if still running
-        kill -9 "$pid" 2>/dev/null
-        rm -f "$PID_FILE"
-        echo "inactive" > "$STATUS_FILE"
-        return 0
-    else
-        # Process might already be dead, clean up anyway
-        rm -f "$PID_FILE"
+    if ! [[ -f "$PID_FILE" ]]; then
         echo "inactive" > "$STATUS_FILE"
         return 1
     fi
+    local pid
+    pid="$(cat "$PID_FILE" 2>/dev/null || true)"
+    if [[ -n "${pid:-}" ]] && kill -0 "$pid" 2>/dev/null; then
+        # Try graceful stop first
+        kill "$pid" 2>/dev/null || true
+        # Short wait, then force if needed
+        sleep 0.3
+        if kill -0 "$pid" 2>/dev/null; then
+            kill -9 "$pid" 2>/dev/null || true
+        fi
+    fi
+    rm -f "$PID_FILE"
+    echo "inactive" > "$STATUS_FILE"
+    return 0
 }
 
-# Function to toggle anti-AFK state
 toggle_anti_afk() {
-    if [[ -f "$PID_FILE" ]] && kill -0 "$(cat "$PID_FILE")" 2>/dev/null; then
+    if is_running; then
         stop_anti_afk
     else
         start_anti_afk
     fi
 }
 
-# Function to check if process is actually running
-is_running() {
-    if [[ -f "$PID_FILE" ]]; then
-        local pid=$(cat "$PID_FILE")
-        if kill -0 "$pid" 2>/dev/null; then
-            return 0
-        else
-            # Process died, clean up
-            rm -f "$PID_FILE"
-            echo "inactive" > "$STATUS_FILE"
-            return 1
-        fi
-    fi
-    return 1
-}
-
-# Function to get status for Waybar display
 get_status() {
     if is_running; then
-        local status=$(cat "$STATUS_FILE" 2>/dev/null || echo "active")
-        case "$status" in
-            "pressing")
-                echo '{"text": "🔄", "class": "pressing", "tooltip": "Anti-AFK: Pressing keys..."}'
-                ;;
-            "active")
-                echo '{"text": "🟢", "class": "active", "tooltip": "Anti-AFK: ON (Click to turn OFF)"}'
-                ;;
+        case "$(cat "$STATUS_FILE" 2>/dev/null || echo active)" in
+            pressing) status_json "🔄" "pressing" "Anti-AFK: Pressing keys..." ;;
+            active|*) status_json "🟢" "active" "Anti-AFK: ON (Click to turn OFF)" ;;
         esac
     else
-        echo '{"text": "🔴", "class": "inactive", "tooltip": "Anti-AFK: OFF (Click to turn ON)"}'
+        status_json "🔴" "inactive" "Anti-AFK: OFF (Click to turn ON)"
     fi
 }
 
-# Initialize status file if it doesn't exist
-if [[ ! -f "$STATUS_FILE" ]]; then
-    echo "inactive" > "$STATUS_FILE"
-fi
+# --- CLI ---
 
-# Main logic
+[[ -f "$STATUS_FILE" ]] || echo "inactive" > "$STATUS_FILE"
+
 case "${1:-status}" in
-    "toggle")
-        toggle_anti_afk
-        ;;
-    "start")
-        start_anti_afk
-        ;;
-    "stop")
-        stop_anti_afk
-        ;;
-    "status")
-        get_status
-        ;;
-    "debug")
-        echo "PID file exists: $(test -f "$PID_FILE" && echo "yes" || echo "no")"
+    toggle) toggle_anti_afk ;;
+    start)  start_anti_afk ;;
+    stop)   stop_anti_afk ;;
+    status) get_status ;;
+    test)   perform_anti_afk_sequence ;;
+    debug)
+        echo "PID file exists: $([[ -f "$PID_FILE" ]] && echo yes || echo no)"
         if [[ -f "$PID_FILE" ]]; then
             echo "PID: $(cat "$PID_FILE")"
-            echo "Process running: $(kill -0 "$(cat "$PID_FILE")" 2>/dev/null && echo "yes" || echo "no")"
+            echo "Process running: $(is_running && echo yes || echo no)"
         fi
-        echo "Status file: $(cat "$STATUS_FILE" 2>/dev/null || echo "missing")"
+        echo "Status: $(cat "$STATUS_FILE" 2>/dev/null || echo missing)"
         ;;
-    "test")
-        echo "Testing key presses..."
-        perform_anti_afk_sequence
-        echo "Test completed."
+    *)
+        echo "Usage: $0 {toggle|start|stop|status|test|debug}" >&2
+        exit 2
         ;;
 esac
