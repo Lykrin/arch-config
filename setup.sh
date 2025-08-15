@@ -212,9 +212,15 @@ if prompt_user "Would you like to regenerate locale?"; then
     print_message "$GREEN" "Locale Generated"
 fi
 
+if prompt_user "Would you like to add user to input group?"; then
+    print_message "$GREEN" "Adding user..."
+    sudo gpasswd -a "$USER" input
+    print_message "$GREEN" "User now in input group"
+fi
+
 # GTK themes
-gsettings set org.gnome.desktop.interface gtk-theme "Catppuccin-Mocha-Teal-Standard"
-gsettings set org.gnome.desktop.wm.preferences theme "Catppuccin-Mocha-Teal-Standard"
+gsettings set org.gnome.desktop.interface gtk-theme "catppuccin-mocha-teal-standard+default"
+gsettings set org.gnome.desktop.wm.preferences theme "catppuccin-mocha-teal-standard+default"
 gsettings set org.gnome.desktop.interface icon-theme "Breeze-Dark"
 gsettings set org.gnome.desktop.interface cursor-theme "Bibata-Modern-Ice"
 gsettings set org.gnome.desktop.interface color-scheme "prefer-dark"
