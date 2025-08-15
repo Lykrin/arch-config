@@ -196,6 +196,17 @@ if prompt_user "Would you like to set up silent boot for zen kernel?"; then
     print_message "$GREEN" "Silent boot configured for zen kernel"
 fi
 
+# Create udev rule for ydotool (uinput)
+if prompt_user "Would you like to create the udev rule for ydotool (uinput)?"; then
+    print_message "$GREEN" "Creating /etc/udev/rules.d/70-ydotool-uinput.rules ..."
+    sudo install -D -m 0644 /dev/stdin /etc/udev/rules.d/70-ydotool-uinput.rules <<'EOF'
+KERNEL=="uinput", GROUP="input", MODE="0660"
+EOF
+    sudo udevadm control --reload
+    sudo udevadm trigger -s input
+    print_message "$GREEN" "udev rule installed and applied. Add user to 'input' group if needed."
+fi
+
 # Kickstart installation (optional)
 if prompt_user "Would you like to install Kickstart Neovim config?"; then
     print_message "$GREEN" "Installing Kickstart Neovim config..."
