@@ -110,7 +110,7 @@ if prompt_user "Would you like to install the packages?"; then
                     noto-fonts-emoji steam ttf-nerd-fonts-symbols-common otf-firamono-nerd qt5-wayland
                     qt6-wayland mkinitcpio-firmware ib-tws nwg-look bolt-launcher bibata-cursor-theme-bin
                     gnome-themes-extra qt5ct qt6ct ripgrep xsettingsd xdg-desktop-portal xdg-desktop-portal-gtk
-                    qbittorrent-enhanced xsettingsd breeze-icons jre11-openjdk)
+                    qbittorrent-enhanced xsettingsd breeze-icons jre11-openjdk libva lib32-vulkan-mesa-layers libvdpau-va-gl)
     install_packages "" "${other_packages[@]}"
     
     echo "[$(date '+%Y-%m-%d %H:%M:%S')] Package installation completed" | tee -a "$INSTLOG"
