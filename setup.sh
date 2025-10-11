@@ -83,23 +83,23 @@ if prompt_user "Would you like to install the packages?"; then
     base_deps=(cmake ninja meson wayland-protocols libxcb xcb-proto xcb-util xcb-util-keysyms
                libxfixes libx11 libxcomposite xorg-xinput libxrender pixman libdrm libxkbcommon
                xcb-util-wm xorg-xwayland glslang qt6-wayland pugixml)
-    install_packages "--sudoloop --removemake --cleanafter" "${base_deps[@]}"
+    install_packages "" "${base_deps[@]}"
     
     # Audio stack
     audio_deps=(pipewire pipewire-pulse pipewire-alsa pipewire-jack pipewire-audio
                 lib32-pipewire lib32-pipewire-jack wireplumber noise-suppression-for-voice)
-    install_packages "--sudoloop --removemake --cleanafter" "${audio_deps[@]}"
+    install_packages "" "${audio_deps[@]}"
     
     # Git packages with overwrite option
     hypr_packages=(hyprutils hyprlang hyprwayland-scanner hyprland-protocols
                   hyprgraphics hyprland-qt-support hyprland-qtutils hyprcursor
                   aquamarine hyprland)
-    install_packages "--sudoloop --removemake --cleanafter" "${hypr_packages[@]}"
+    install_packages "" "${hypr_packages[@]}"
     
     # Additional utilities with overwrite option
     hypr_utils=(hypridle hyprlock hyprpaper hyprpolkitagent
                       xdg-desktop-portal-hyprland)
-    install_packages "--sudoloop --removemake --cleanafter" "${hypr_utils[@]}"
+    install_packages "" "${hypr_utils[@]}"
     
     # Rest of the packages - removed NetworkManager and added iwd for iwctl
     other_packages=(fish waybar iwd ffmpeg ffmpegthumbnailer
@@ -111,7 +111,7 @@ if prompt_user "Would you like to install the packages?"; then
                     qt6-wayland mkinitcpio-firmware ib-tws nwg-look bolt-launcher bibata-cursor-theme-bin
                     gnome-themes-extra qt5ct qt6ct ripgrep xdg-desktop-portal xdg-desktop-portal-gtk
                     qbittorrent-enhanced xsettingsd breeze-icons jre11-openjdk libva lib32-vulkan-mesa-layers libvdpau-va-gl)
-    install_packages "--sudoloop --removemake --cleanafter" "${other_packages[@]}"
+    install_packages "" "${other_packages[@]}"
     
     echo "[$(date '+%Y-%m-%d %H:%M:%S')] Package installation completed" | tee -a "$INSTLOG"
 fi
