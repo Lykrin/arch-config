@@ -1,53 +1,51 @@
 #!/bin/bash
 set -euo pipefail
 
-# Define ANSI color codes
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-YELLOW='\033[0;33m'
-NC='\033[0m'  # No Color
+RED='\u001B[0;31m'
+GREEN='\u001B[0;32m'
+YELLOW='\u001B[0;33m'
+NC='\u001B[0m'
 INSTLOG="install.log"
 
-# Function to print colored messages
 print_message() {
     local color=$1
     shift
     echo -e "${color}$*${NC}"
 }
 
-# Function to prompt user; returns 0 for yes and 1 for no
 prompt_user() {
     local prompt=$1
     echo -en "${YELLOW}${prompt}${NC} (Y/n) "
-    read -n1 -r response
-    echo    # Move to new line
+    read -r response
     if [[ "$response" =~ ^[Nn]$ ]]; then
         return 1
     fi
     return 0
 }
 
-# Function to update packages using yay
 update_yay() {
     yay -Syu --noconfirm "${@:-}" 2>&1 | tee -a "$INSTLOG"
 }
 
-# Function to install a batch of packages
 install_packages() {
-    local options=("$@")
-    # The caller should supply options and then the list of packages
-    yay -S --noconfirm --needed "${options[@]}" 2>&1 | tee -a "$INSTLOG"
+    yay -S --noconfirm --needed "$@" 2>&1 | tee -a "$INSTLOG"
 }
 
-# Function to extend sudo timeout to avoid repeated password prompts
 extend_sudo_timeout() {
-    print_message "$YELLOW" "Extending sudo session timeout for this script..."
+    print_message "$YELLOW" "Extending sudo session timeout..."
     sudo -v
-    # Keep sudo alive in background
     while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
 }
 
-# Ensure required dependencies are available
+cleanup() {
+    jobs -p | xargs -r kill 2>/dev/null
+}
+
+trap cleanup EXIT INT TERM
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+cd "$SCRIPT_DIR" || exit 1
+
 if pacman -Qq base-devel &>/dev/null; then
     print_message "$GREEN" "Base Devel located, moving on."
 else
@@ -55,16 +53,15 @@ else
     exit 1
 fi
 
-# Extend sudo timeout early to avoid repeated prompts
 extend_sudo_timeout
 
-# Check for yay using command -v; install if missing
 if command -v yay &>/dev/null; then
     print_message "$GREEN" "Yay located, updating system."
     update_yay
 else
     print_message "$RED" "Yay not found."
     if prompt_user "Would you like to install yay?"; then
+        [ -d "yay" ] && rm -rf yay
         git clone https://aur.archlinux.org/yay.git 2>> "$INSTLOG"
         (cd yay && makepkg -si --noconfirm 2>> "$INSTLOG")
         rm -rf yay
@@ -75,177 +72,169 @@ else
     fi
 fi
 
-# Install packages if confirmed by user
 if prompt_user "Would you like to install the packages?"; then
     echo "[$(date '+%Y-%m-%d %H:%M:%S')] Starting package installation" | tee -a "$INSTLOG"
-    
-    # Base dependencies
+
     base_deps=(cmake ninja meson wayland-protocols libxcb xcb-proto xcb-util xcb-util-keysyms
                libxfixes libx11 libxcomposite xorg-xinput libxrender pixman libdrm libxkbcommon
                xcb-util-wm xorg-xwayland glslang qt6-wayland pugixml)
-    install_packages "" "${base_deps[@]}"
-    
-    # Audio stack
+    install_packages "${base_deps[@]}"
+
     audio_deps=(pipewire pipewire-pulse pipewire-alsa pipewire-jack pipewire-audio
                 lib32-pipewire lib32-pipewire-jack wireplumber noise-suppression-for-voice)
-    install_packages "" "${audio_deps[@]}"
-    
-    # Git packages with overwrite option
+    install_packages "${audio_deps[@]}"
+
     hypr_packages=(hyprutils hyprlang hyprwayland-scanner hyprland-protocols
                   hyprgraphics hyprland-qt-support hyprland-qtutils hyprcursor
                   aquamarine hyprland)
-    install_packages "" "${hypr_packages[@]}"
-    
-    # Additional utilities with overwrite option
-    hypr_utils=(hypridle hyprlock hyprpaper hyprpolkitagent
-                      xdg-desktop-portal-hyprland)
-    install_packages "" "${hypr_utils[@]}"
-    
-    # Rest of the packages - removed NetworkManager and added iwd for iwctl
-    other_packages=(fish waybar iwd ffmpeg ffmpegthumbnailer
-                    wf-recorder ydotool grimblast-git uwsm neovim foot foot-terminfo nemo nemo-fileroller
-                    gvfs gvfs-mtp fuzzel pavucontrol cliphist wl-clipboard wttrbar mpv
-                    btop vivaldi vesktop fprintd cava dunst pamixer brightnessctl catppuccin-gtk-theme-mocha
-                    sweet-folders-icons-git xdg-user-dirs fastfetch ladspa noto-fonts-cjk ttf-firacode-nerd noto-fonts
-                    noto-fonts-emoji steam ttf-nerd-fonts-symbols-common otf-firamono-nerd qt5-wayland
-                    qt6-wayland mkinitcpio-firmware ib-tws nwg-look bolt-launcher bibata-cursor-theme-bin
-                    gnome-themes-extra qt5ct qt6ct ripgrep xdg-desktop-portal xdg-desktop-portal-gtk
-                    qbittorrent-enhanced xsettingsd breeze-icons jre11-openjdk libva lib32-vulkan-mesa-layers libvdpau-va-gl)
-    install_packages "" "${other_packages[@]}"
-    
+    install_packages "${hypr_packages[@]}"
+
+    hypr_utils=(hypridle hyprlock hyprpaper hyprpolkitagent xdg-desktop-portal-hyprland)
+    install_packages "${hypr_utils[@]}"
+
+    other_packages=(fish waybar iwd ffmpeg ffmpegthumbnailer wf-recorder ydotool grimblast-git 
+                    uwsm neovim foot foot-terminfo nemo nemo-fileroller gvfs gvfs-mtp fuzzel 
+                    pavucontrol cliphist wl-clipboard wttrbar mpv btop vivaldi vesktop fprintd 
+                    cava dunst pamixer brightnessctl catppuccin-gtk-theme-mocha sweet-folders-icons-git 
+                    xdg-user-dirs fastfetch ladspa noto-fonts-cjk ttf-firacode-nerd noto-fonts 
+                    noto-fonts-emoji steam ttf-nerd-fonts-symbols-common otf-firamono-nerd qt5-wayland 
+                    qt6-wayland mkinitcpio-firmware ib-tws nwg-look bolt-launcher bibata-cursor-theme-bin 
+                    gnome-themes-extra qt5ct qt6ct ripgrep xdg-desktop-portal xdg-desktop-portal-gtk 
+                    qbittorrent-enhanced xsettingsd breeze-icons jre11-openjdk libva lib32-vulkan-mesa-layers 
+                    libvdpau-va-gl)
+    install_packages "${other_packages[@]}"
+
     echo "[$(date '+%Y-%m-%d %H:%M:%S')] Package installation completed" | tee -a "$INSTLOG"
+    
+    for pkg in hyprland fish foot; do
+        if ! pacman -Qq "$pkg" &>/dev/null; then
+            print_message "$RED" "Critical package $pkg failed to install!"
+        fi
+    done
 fi
 
-# Set Fish as default shell
 if prompt_user "Would you like to set Fish as your default shell?"; then
     print_message "$GREEN" "Setting Fish as default shell..."
-    
-    # Check if fish is in /etc/shells
     if ! grep -q "/usr/bin/fish" /etc/shells; then
         echo "/usr/bin/fish" | sudo tee -a /etc/shells
     fi
-    
-    # Change default shell to fish
     sudo chsh -s /usr/bin/fish "$USER"
-    print_message "$GREEN" "Fish shell set as default. Changes will take effect after logout/login."
+    print_message "$GREEN" "Fish shell set as default. Changes take effect after logout/login."
 fi
 
-# Copy configuration files if requested
 if prompt_user "Would you like to copy configuration files?"; then
-    print_message "$GREEN" "Copying configuration files..."
-    
-    # Create necessary directories
-    mkdir -p ~/.config ~/.icons
-    
-    # Copy .config directory contents (includes UWSM configuration)
-    if [ -d ".config" ]; then
-        cp -R .config/* ~/.config/
-        print_message "$GREEN" "Copied .config files (including UWSM configuration)"
+    if [ ! -d ".config" ] && [ ! -d "wallpapers" ] && [ ! -d ".icons" ]; then
+        print_message "$RED" "No configuration directories found in current directory"
+    else
+        print_message "$GREEN" "Copying configuration files..."
+        mkdir -p ~/.config ~/.icons
+
+        if [ -d ".config" ]; then
+            cp -R .config/* ~/.config/
+            print_message "$GREEN" "Copied .config files"
+        fi
+
+        if [ -d "wallpapers" ]; then
+            cp -R wallpapers ~/
+            print_message "$GREEN" "Copied wallpapers"
+        fi
+
+        if [ -d ".icons" ]; then
+            cp -R .icons/* ~/.icons/
+            print_message "$GREEN" "Copied .icons files"
+        fi
+
+        if [ -f "loader.conf" ]; then
+            sudo cp -f loader.conf /boot/loader/
+            print_message "$GREEN" "Copied loader.conf"
+        fi
+
+        if [ -f "vconsole.conf" ]; then
+            sudo cp -f vconsole.conf /etc/
+            print_message "$GREEN" "Copied vconsole.conf"
+        fi
+
+        if [ -f "mkinitcpio.conf" ]; then
+            sudo cp -f mkinitcpio.conf /etc/
+            print_message "$GREEN" "Copied mkinitcpio.conf"
+        fi
+
+        if [ -f "locale.gen" ]; then
+            sudo cp -f locale.gen /etc/
+            print_message "$GREEN" "Copied locale.gen"
+        fi
+
+        [ -d ~/.config/waybar/scripts ] && chmod +x ~/.config/waybar/scripts/*
+        [ -f ~/.config/hypr/xdg-portal-hyprland ] && chmod +x ~/.config/hypr/xdg-portal-hyprland
+
+        print_message "$GREEN" "Configuration files copied successfully"
     fi
-    
-    # Copy wallpapers directory
-    if [ -d "wallpapers" ]; then
-        cp -R wallpapers ~/
-        print_message "$GREEN" "Copied wallpapers"
-    fi
-    
-    # Copy icons directory
-    if [ -d ".icons" ]; then
-        cp -R .icons/* ~/.icons/
-        print_message "$GREEN" "Copied .icons files"
-    fi
-    
-    # Copy system configuration files
-    if [ -f "loader.conf" ]; then
-        sudo cp -f loader.conf /boot/loader/
-        print_message "$GREEN" "Copied loader.conf"
-    fi
-    
-    if [ -f "vconsole.conf" ]; then
-        sudo cp -f vconsole.conf /etc/
-        print_message "$GREEN" "Copied vconsole.conf"
-    fi
-    
-    if [ -f "mkinitcpio.conf" ]; then
-        sudo cp -f mkinitcpio.conf /etc/
-        print_message "$GREEN" "Copied mkinitcpio.conf"
-    fi
-    
-    if [ -f "locale.gen" ]; then
-        sudo cp -f locale.gen /etc/
-        print_message "$GREEN" "Copied Locale file"
-    fi
-    
-    # Set executable permissions for scripts
-    if [ -d ~/.config/waybar/scripts ]; then
-        chmod +x ~/.config/waybar/scripts/*
-    fi
-    
-    if [ -f ~/.config/hypr/xdg-portal-hyprland ]; then
-        chmod +x ~/.config/hypr/xdg-portal-hyprland
-    fi
-    
-    print_message "$GREEN" "Configuration files copied successfully"
 fi
 
-# Setup silent boot for zen kernel
 if prompt_user "Would you like to set up silent boot for zen kernel?"; then
     print_message "$GREEN" "Setting up silent boot for zen kernel..."
-    sudo find /boot/loader/entries/ -name '*linux-zen.conf' \
-      -exec sed -i '/^options/ s/$/ quiet loglevel=2 systemd.show_status=auto rd.udev.log_level=2/' {} +
-    print_message "$GREEN" "Silent boot configured for zen kernel"
+    zen_conf=$(find /boot/loader/entries/ -name '*linux-zen.conf' -print -quit)
+    if [ -n "$zen_conf" ]; then
+        sudo sed -i.bak '/^options/ s/$/ quiet loglevel=3 systemd.show_status=auto rd.udev.log_level=3/' "$zen_conf"
+        print_message "$GREEN" "Silent boot configured for zen kernel"
+    else
+        print_message "$YELLOW" "No zen kernel entry found"
+    fi
 fi
 
-# Create udev rule for ydotool (uinput)
 if prompt_user "Would you like to create the udev rule for ydotool (uinput)?"; then
-    print_message "$GREEN" "Creating /etc/udev/rules.d/70-ydotool-uinput.rules ..."
+    print_message "$GREEN" "Creating udev rule for ydotool..."
     sudo install -D -m 0644 /dev/stdin /etc/udev/rules.d/70-ydotool-uinput.rules <<'EOF'
 KERNEL=="uinput", GROUP="input", MODE="0660"
 EOF
     sudo udevadm control --reload
     sudo udevadm trigger -s input
-    print_message "$GREEN" "udev rule installed and applied. Add user to 'input' group if needed."
+    print_message "$GREEN" "udev rule installed and applied."
 fi
 
-# Kickstart installation (optional)
 if prompt_user "Would you like to install Kickstart Neovim config?"; then
     print_message "$GREEN" "Installing Kickstart Neovim config..."
-    # Backup existing nvim config if it exists and it's not from the repo
-    if [ -d ~/.config/nvim ] && [ ! -f ~/.config/nvim/.repo_config ]; then
-        mv ~/.config/nvim ~/.config/nvim.backup.$(date +%Y%m%d_%H%M%S)
+    if [ -d ~/.config/nvim ]; then
+        if [ -d ~/.config/nvim/.git ]; then
+            rm -rf ~/.config/nvim
+        else
+            mv ~/.config/nvim ~/.config/nvim.backup.$(date +%Y%m%d_%H%M%S)
+        fi
     fi
     git clone https://github.com/lykrin/kickstart.nvim.git ~/.config/nvim
 fi
 
 if prompt_user "Would you like to regenerate locale?"; then
-    print_message "$GREEN" "Setting up locale..."
+    print_message "$GREEN" "Regenerating locale..."
     sudo locale-gen
-    print_message "$GREEN" "Locale Generated"
+    print_message "$GREEN" "Locale generated"
 fi
 
 if prompt_user "Would you like to add user to input group?"; then
-    print_message "$GREEN" "Adding user..."
-    sudo gpasswd -a "$USER" input
-    print_message "$GREEN" "User now in input group"
+    if ! groups "$USER" | grep -q '\binput\b'; then
+        sudo gpasswd -a "$USER" input
+        print_message "$GREEN" "User added to input group"
+    else
+        print_message "$YELLOW" "User already in input group"
+    fi
 fi
 
-# GTK themes
-gsettings set org.gnome.desktop.interface gtk-theme "catppuccin-mocha-teal-standard+default"
-gsettings set org.gnome.desktop.wm.preferences theme "catppuccin-mocha-teal-standard+default"
-gsettings set org.gnome.desktop.interface icon-theme "Breeze-Dark"
-gsettings set org.gnome.desktop.interface cursor-theme "Bibata-Modern-Ice"
-gsettings set org.gnome.desktop.interface color-scheme "prefer-dark"
+if command -v gsettings &>/dev/null && [ -n "${DISPLAY:-${WAYLAND_DISPLAY:-}}" ]; then
+    gsettings set org.gnome.desktop.interface gtk-theme "catppuccin-mocha-teal-standard+default"
+    gsettings set org.gnome.desktop.wm.preferences theme "catppuccin-mocha-teal-standard+default"
+    gsettings set org.gnome.desktop.interface icon-theme "Breeze-Dark"
+    gsettings set org.gnome.desktop.interface cursor-theme "Bibata-Modern-Ice"
+    gsettings set org.gnome.desktop.interface color-scheme "prefer-dark"
+fi
 
-
-print_message "$GREEN" "Script has completed successfully!"
+print_message "$GREEN" "Script completed successfully!"
 print_message "$YELLOW" "Important notes:"
 print_message "$YELLOW" "- Fish shell is now your default shell (effective after logout/login)"
-print_message "$YELLOW" "- UWSM configuration is already included in your .config files"
-print_message "$YELLOW" "- Hyprland will auto-start on TTY1 login with your existing UWSM setup"
+print_message "$YELLOW" "- UWSM configuration is included in your .config files"
+print_message "$YELLOW" "- Hyprland will auto-start on TTY1 login with UWSM"
 print_message "$YELLOW" "- Silent boot is configured for zen kernel"
-print_message "$YELLOW" "- Locale regenerated and set up"
+print_message "$YELLOW" "- Add 'uwsm finalize' to your Fish config for proper session management"
 
-# Prompt for reboot
 if prompt_user "Would you like to reboot now to apply all changes?"; then
     sudo reboot
 fi
