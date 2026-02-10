@@ -1,10 +1,10 @@
 #!/bin/bash
 set -euo pipefail
 
-RED='\u001B[0;31m'
-GREEN='\u001B[0;32m'
-YELLOW='\u001B[0;33m'
-NC='\u001B[0m'
+RED='\\u001B[0;31m'
+GREEN='\\u001B[0;32m'
+YELLOW='\\u001B[0;33m'
+NC='\\u001B[0m'
 INSTLOG="install.log"
 
 print_message() {
@@ -75,25 +75,33 @@ fi
 if prompt_user "Would you like to install the packages?"; then
     echo "[$(date '+%Y-%m-%d %H:%M:%S')] Starting package installation" | tee -a "$INSTLOG"
 
+    # Base dependencies for building
     base_deps=(cmake ninja meson wayland-protocols libxcb xcb-proto xcb-util xcb-util-keysyms
                libxfixes libx11 libxcomposite xorg-xinput libxrender pixman libdrm libxkbcommon
                xcb-util-wm xorg-xwayland glslang qt6-wayland pugixml)
     install_packages "${base_deps[@]}"
 
+    # Audio stack
     audio_deps=(pipewire pipewire-pulse pipewire-alsa pipewire-jack pipewire-audio
                 lib32-pipewire lib32-pipewire-jack wireplumber noise-suppression-for-voice)
     install_packages "${audio_deps[@]}"
 
+    # Hyprland core libraries (0.53+ requirements)
     hypr_packages=(hyprutils hyprlang hyprwayland-scanner hyprland-protocols
-                  hyprgraphics hyprland-qt-support hyprland-qtutils hyprcursor
-                  aquamarine hyprland)
+                  hyprgraphics hyprcursor hyprwire aquamarine 
+                  hyprland-guiutils muparser re2 glaze hyprland)
     install_packages "${hypr_packages[@]}"
 
+    # Hyprland ecosystem utilities
     hypr_utils=(hypridle hyprlock hyprpaper hyprpolkitagent xdg-desktop-portal-hyprland)
     install_packages "${hypr_utils[@]}"
 
+    # Session management (UWSM is now optional but recommended)
+    install_packages uwsm
+
+    # Other tools and applications
     other_packages=(fish waybar iwd ffmpeg ffmpegthumbnailer wf-recorder ydotool grimblast-git 
-                    uwsm neovim foot foot-terminfo nemo nemo-fileroller gvfs gvfs-mtp fuzzel 
+                    neovim foot foot-terminfo nemo nemo-fileroller gvfs gvfs-mtp fuzzel 
                     pavucontrol cliphist wl-clipboard wttrbar mpv btop vivaldi vesktop fprintd 
                     cava dunst pamixer brightnessctl catppuccin-gtk-theme-mocha sweet-folders-icons-git 
                     xdg-user-dirs fastfetch ladspa noto-fonts-cjk ttf-firacode-nerd noto-fonts 
@@ -106,7 +114,8 @@ if prompt_user "Would you like to install the packages?"; then
 
     echo "[$(date '+%Y-%m-%d %H:%M:%S')] Package installation completed" | tee -a "$INSTLOG"
     
-    for pkg in hyprland fish foot; do
+    # Verify critical packages
+    for pkg in hyprland fish foot hyprutils aquamarine; do
         if ! pacman -Qq "$pkg" &>/dev/null; then
             print_message "$RED" "Critical package $pkg failed to install!"
         fi
@@ -211,7 +220,7 @@ if prompt_user "Would you like to regenerate locale?"; then
 fi
 
 if prompt_user "Would you like to add user to input group?"; then
-    if ! groups "$USER" | grep -q '\binput\b'; then
+    if ! groups "$USER" | grep -q '\\binput\\b'; then
         sudo gpasswd -a "$USER" input
         print_message "$GREEN" "User added to input group"
     else
@@ -219,12 +228,22 @@ if prompt_user "Would you like to add user to input group?"; then
     fi
 fi
 
+# GTK/Qt theming
 if command -v gsettings &>/dev/null && [ -n "${DISPLAY:-${WAYLAND_DISPLAY:-}}" ]; then
+    print_message "$GREEN" "Applying GTK theme settings..."
     gsettings set org.gnome.desktop.interface gtk-theme "catppuccin-mocha-teal-standard+default"
     gsettings set org.gnome.desktop.wm.preferences theme "catppuccin-mocha-teal-standard+default"
     gsettings set org.gnome.desktop.interface icon-theme "Breeze-Dark"
     gsettings set org.gnome.desktop.interface cursor-theme "Bibata-Modern-Ice"
     gsettings set org.gnome.desktop.interface color-scheme "prefer-dark"
+fi
+
+# Rebuild initramfs if mkinitcpio.conf was copied
+if [ -f "mkinitcpio.conf" ] && [ -f /etc/mkinitcpio.conf ]; then
+    if prompt_user "Would you like to rebuild initramfs now?"; then
+        print_message "$GREEN" "Rebuilding initramfs..."
+        sudo mkinitcpio -P
+    fi
 fi
 
 print_message "$GREEN" "Script completed successfully!"
@@ -234,6 +253,7 @@ print_message "$YELLOW" "- UWSM configuration is included in your .config files"
 print_message "$YELLOW" "- Hyprland will auto-start on TTY1 login with UWSM"
 print_message "$YELLOW" "- Silent boot is configured for zen kernel"
 print_message "$YELLOW" "- Add 'uwsm finalize' to your Fish config for proper session management"
+print_message "$YELLOW" "- Make sure to reboot if you updated mkinitcpio.conf or locale settings"
 
 if prompt_user "Would you like to reboot now to apply all changes?"; then
     sudo reboot
