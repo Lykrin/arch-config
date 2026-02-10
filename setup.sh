@@ -102,7 +102,7 @@ if prompt_user "Would you like to install the packages?"; then
     # Other tools and applications
     other_packages=(fish waybar iwd ffmpeg ffmpegthumbnailer wf-recorder ydotool grimblast-git 
                     neovim foot foot-terminfo nemo nemo-fileroller gvfs gvfs-mtp fuzzel 
-                    pavucontrol cliphist wl-clipboard wttrbar mpv btop vivaldi vesktop fprintd 
+                    pavucontrol cliphist wl-clipboard wttrbar mpv btop zen-browser-bin vesktop fprintd 
                     cava dunst pamixer brightnessctl catppuccin-gtk-theme-mocha sweet-folders-icons-git 
                     xdg-user-dirs fastfetch ladspa noto-fonts-cjk ttf-firacode-nerd noto-fonts 
                     noto-fonts-emoji steam ttf-nerd-fonts-symbols-common otf-firamono-nerd qt5-wayland 
