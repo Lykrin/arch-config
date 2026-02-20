@@ -1,10 +1,10 @@
 #!/bin/bash
 set -euo pipefail
 
-RED='\\u001B[0;31m'
-GREEN='\\u001B[0;32m'
-YELLOW='\\u001B[0;33m'
-NC='\\u001B[0m'
+RED='\e[0;31m'
+GREEN='\e[0;32m'
+YELLOW='\e[0;33m'
+NC='\e[0m'
 INSTLOG="install.log"
 
 print_message() {
