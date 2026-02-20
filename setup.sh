@@ -164,8 +164,9 @@ if prompt_user "Would you like to copy configuration files?"; then
         fi
 
         if [ -f "mkinitcpio.conf" ]; then
+            [ -f /etc/mkinitcpio.conf ] && sudo cp /etc/mkinitcpio.conf /etc/mkinitcpio.conf.bak
             sudo cp -f mkinitcpio.conf /etc/
-            print_message "$GREEN" "Copied mkinitcpio.conf"
+            print_message "$GREEN" "Copied mkinitcpio.conf (backed up original)"
         fi
 
         if [ -f "locale.gen" ]; then
@@ -173,7 +174,7 @@ if prompt_user "Would you like to copy configuration files?"; then
             print_message "$GREEN" "Copied locale.gen"
         fi
 
-        [ -d ~/.config/waybar/scripts ] && chmod +x ~/.config/waybar/scripts/*
+        [ -d ~/.config/waybar/scripts ] && find ~/.config/waybar/scripts -type f -exec chmod +x {} +
         [ -f ~/.config/hypr/xdg-portal-hyprland ] && chmod +x ~/.config/hypr/xdg-portal-hyprland
 
         print_message "$GREEN" "Configuration files copied successfully"
@@ -184,7 +185,9 @@ if prompt_user "Would you like to set up silent boot for zen kernel?"; then
     print_message "$GREEN" "Setting up silent boot for zen kernel..."
     zen_conf=$(find /boot/loader/entries/ -name '*linux-zen.conf' -print -quit)
     if [ -n "$zen_conf" ]; then
-        sudo sed -i.bak '/^options/ s/$/ quiet loglevel=3 systemd.show_status=auto rd.udev.log_level=3/' "$zen_conf"
+        if ! grep -q "quiet loglevel=3" "$zen_conf"; then
+            sudo sed -i.bak '/^options/ s/$/ quiet loglevel=3 systemd.show_status=auto rd.udev.log_level=3/' "$zen_conf"
+        fi
         print_message "$GREEN" "Silent boot configured for zen kernel"
     else
         print_message "$YELLOW" "No zen kernel entry found"
@@ -220,22 +223,12 @@ if prompt_user "Would you like to regenerate locale?"; then
 fi
 
 if prompt_user "Would you like to add user to input group?"; then
-    if ! groups "$USER" | grep -q '\\binput\\b'; then
+    if ! groups "$USER" | grep -qw "input"; then
         sudo gpasswd -a "$USER" input
         print_message "$GREEN" "User added to input group"
     else
         print_message "$YELLOW" "User already in input group"
     fi
-fi
-
-# GTK/Qt theming
-if command -v gsettings &>/dev/null && [ -n "${DISPLAY:-${WAYLAND_DISPLAY:-}}" ]; then
-    print_message "$GREEN" "Applying GTK theme settings..."
-    gsettings set org.gnome.desktop.interface gtk-theme "catppuccin-mocha-teal-standard+default"
-    gsettings set org.gnome.desktop.wm.preferences theme "catppuccin-mocha-teal-standard+default"
-    gsettings set org.gnome.desktop.interface icon-theme "Breeze-Dark"
-    gsettings set org.gnome.desktop.interface cursor-theme "Bibata-Modern-Ice"
-    gsettings set org.gnome.desktop.interface color-scheme "prefer-dark"
 fi
 
 # Rebuild initramfs if mkinitcpio.conf was copied
